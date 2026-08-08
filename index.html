@@ -17,6 +17,27 @@
     }
     canvas { touch-action: none; }
   </style>
+  <script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    // Si la URL tiene "?pro=true", guarda la licencia y limpia la URL
+    if (urlParams.get('pro') === 'true') {
+      localStorage.setItem('scopeguard_pro', 'true');
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+
+    // Si ya existe la licencia guardada en el navegador
+    if (localStorage.getItem('scopeguard_pro') === 'true') {
+      activarModoPro();
+    }
+  });
+
+  function activarModoPro() {
+    console.log("Licencia PRO activa");
+    // Añade aquí los cambios visuales o funcionales de la versión PRO
+  }
+</script>
 </head>
 <body class="h-full text-slate-800 antialiased flex flex-col">
 
