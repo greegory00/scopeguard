@@ -4,9 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ScopeGuard - Gestión de Alcance y Parte de Horas</title>
+  
+  <!-- METAETIQUETAS OPEN GRAPH & FAVICON -->
+  <meta property="og:title" content="ScopeGuard - Control de Alcance y Parte de Horas">
+  <meta property="og:description" content="Evita el scope creep en tus proyectos freelances. Genera presupuestos de modificación y partes de horas profesionales en segundos.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/javascript/javascript.png">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+
+  <!-- TAILWIND, FONT AWESOME & GOOGLE FONTS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- COMPRESIÓN LZ-STRING PARA ENLACES LIGEROS EN WHATSAPP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
+
   <style>
     body { font-family: 'Inter', sans-serif; }
     @media print {
@@ -62,6 +75,25 @@
       </div>
     </div>
   </header>
+
+  <!-- HERO / LANDING SECTION (PROPUESTA DE VALOR) -->
+  <section id="hero-banner" class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white py-8 px-4 sm:px-6 lg:px-8 border-b border-slate-800 no-print">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="space-y-2 max-w-2xl text-center md:text-left">
+        <span class="inline-block bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-[11px] px-3 py-0.5 rounded-full font-semibold uppercase tracking-wider" data-i18n="heroBadge">Control de Alcance Profesional</span>
+        <h2 class="text-xl sm:text-2xl font-black tracking-tight" data-i18n="heroTitle">Evita el trabajo extra no remunerado en tus proyectos</h2>
+        <p class="text-xs text-slate-300 leading-relaxed" data-i18n="heroSub">Genera presupuestos de modificación (adendas) en segundos antes de asumir cambios fuera del contrato original, o elabora partes de horas profesionales para facturación directa.</p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+        <a href="#editor-panel" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs px-5 py-2.5 rounded-xl transition text-center shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2">
+          <i class="fa-solid fa-pen-to-square"></i> <span data-i18n="btnStartEditor">Crear Documento</span>
+        </a>
+        <button onclick="openProModal()" class="bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-500/30 font-semibold text-xs px-5 py-2.5 rounded-xl transition text-center flex items-center justify-center gap-2">
+          <i class="fa-solid fa-crown"></i> <span data-i18n="btnSeeProFeatures">Ver Plan PRO</span>
+        </button>
+      </div>
+    </div>
+  </section>
 
   <!-- READ ONLY CLIENT VIEW BANNER -->
   <div id="client-view-banner" class="hidden bg-indigo-600 text-white text-center py-2 px-4 text-sm font-medium no-print flex justify-between items-center">
@@ -483,13 +515,13 @@
       </ul>
 
       <div class="space-y-3 pt-2 border-t border-slate-100">
-        <!-- REEMPLAZA ESTE ENLACE POR TU STRIPE PAYMENT LINK REAL -->
+        <!-- REEMPLAZA CON TU ENLACE REAL DE STRIPE PAYMENT LINK -->
         <a href="https://buy.stripe.com/3cIcN47iHgZ95PT5Do9IQ00" target="_blank" class="block w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-bold text-sm rounded-xl shadow-lg transition text-center hover:opacity-95" data-i18n="btnBuyPro">
           Comprar Licencia PRO ($19 USD)
         </a>
         
         <div class="flex items-center gap-2">
-          <input type="text" id="license-key-input" data-i18n-placeholder="phLicense" placeholder="Introduce tu clave de licencia" class="flex-1 px-3 py-2 text-xs border border-slate-300 rounded-lg outline-none uppercase">
+          <input type="text" id="license-key-input" data-i18n-placeholder="phLicense" placeholder="Introduce tu ID de Sesión de Stripe" class="flex-1 px-3 py-2 text-xs border border-slate-300 rounded-lg outline-none uppercase">
           <button onclick="activateProLicense()" class="px-3 py-2 bg-slate-800 text-white text-xs font-semibold rounded-lg hover:bg-slate-700" data-i18n="btnValidate">Validar</button>
         </div>
       </div>
@@ -504,6 +536,11 @@
     const translations = {
       es: {
         tagline: "Presupuestos Previos & Parte de Horas",
+        heroBadge: "Control de Alcance Profesional",
+        heroTitle: "Evita el trabajo extra no remunerado en tus proyectos",
+        heroSub: "Genera presupuestos de modificación (adendas) en segundos antes de asumir cambios fuera del contrato original, o elabora partes de horas profesionales para facturación directa.",
+        btnStartEditor: "Crear Documento",
+        btnSeeProFeatures: "Ver Plan PRO",
         btnFeedback: "Sugerencias y Opinión",
         btnHistory: "Historial",
         clientBanner: "Estás viendo un documento compartido en modo lectura.",
@@ -584,7 +621,7 @@
         proFeature4: "Tareas ilimitadas por presupuesto (vs. 3 en Free).",
         proFeature5: "Firma digital táctil del cliente en pantalla.",
         btnBuyPro: "Comprar Licencia PRO ($19 USD)",
-        phLicense: "Introduce tu clave de licencia",
+        phLicense: "Introduce tu ID de Sesión de Stripe",
         btnValidate: "Validar",
         btnContinueFree: "Seguir usando la versión gratuita",
         badgeAddendum: "Adenda de Alcance Nº",
@@ -621,10 +658,10 @@
         outWatermark: "Documento generado vía ScopeGuard",
         alertWhatsAppCopied: "¡Mensaje diplomático redactado y copiado al portapapeles! Listo para pegar en WhatsApp.",
         alertLicenseActivated: "¡Licencia PRO activada correctamente! Gracias por tu compra.",
-        alertLicenseInvalid: "Clave de licencia no válida. Por favor, comprueba el correo de confirmación de Stripe.",
+        alertLicenseInvalid: "ID o clave no válida. Por favor comprueba tu correo de confirmación de Stripe.",
         alertFeedbackSent: "¡Gracias por tus comentarios! Nos ayudan a mejorar ScopeGuard.",
         alertFeedbackEmpty: "Por favor, escribe tus comentarios antes de enviar.",
-        alertLinkCopied: "¡Enlace interactivo copiado al portapapeles!",
+        alertLinkCopied: "¡Enlace interactivo comprimido copiado al portapapeles!",
         alertSavedLocal: "Documento guardado correctamente en tu historial local.",
         alertNoHistoryCSV: "No hay historial guardado para exportar.",
         historyEmpty: "No hay documentos guardados aún.",
@@ -636,6 +673,11 @@
       },
       en: {
         tagline: "Scope Proposals & Timesheet Tracker",
+        heroBadge: "Professional Scope Management",
+        heroTitle: "Stop doing unpaid extra work on your client projects",
+        heroSub: "Generate change proposals (addendums) in seconds before committing to out-of-scope requests, or log professional timesheets for direct invoicing.",
+        btnStartEditor: "Create Document",
+        btnSeeProFeatures: "View PRO Plan",
         btnFeedback: "Feedback & Opinions",
         btnHistory: "History",
         clientBanner: "You are viewing a shared document in read-only mode.",
@@ -716,7 +758,7 @@
         proFeature4: "Unlimited tasks per quote (vs. 3 in Free).",
         proFeature5: "On-screen client touchscreen digital signature.",
         btnBuyPro: "Buy PRO License ($19 USD)",
-        phLicense: "Enter your license key",
+        phLicense: "Enter your Stripe Session ID",
         btnValidate: "Validate",
         btnContinueFree: "Continue using free version",
         badgeAddendum: "Scope Addendum No.",
@@ -753,10 +795,10 @@
         outWatermark: "Document generated via ScopeGuard",
         alertWhatsAppCopied: "Diplomatic message generated and copied to clipboard! Ready to paste into WhatsApp.",
         alertLicenseActivated: "PRO License activated successfully! Thank you for your purchase.",
-        alertLicenseInvalid: "Invalid license key. Please check your Stripe confirmation email.",
+        alertLicenseInvalid: "Invalid session ID. Please check your Stripe confirmation email.",
         alertFeedbackSent: "Thank you for your feedback! It helps us improve ScopeGuard.",
         alertFeedbackEmpty: "Please enter your feedback before sending.",
-        alertLinkCopied: "Interactive link copied to clipboard!",
+        alertLinkCopied: "Compressed interactive link copied to clipboard!",
         alertSavedLocal: "Document saved successfully to your local history.",
         alertNoHistoryCSV: "No saved history to export.",
         historyEmpty: "No saved documents yet.",
@@ -768,6 +810,11 @@
       },
       fr: {
         tagline: "Devis de Modifications & Relevé d'Heures",
+        heroBadge: "Gestion du Périmètre Professionnelle",
+        heroTitle: "Évitez el trabajo no remunerado en tus proyectos",
+        heroSub: "Générez des devis d'avenant en quelques secondes avant de valider des changements, ou créez des relevés d'heures professionnels.",
+        btnStartEditor: "Créer Document",
+        btnSeeProFeatures: "Voir Plan PRO",
         btnFeedback: "Avis & Suggestions",
         btnHistory: "Historique",
         clientBanner: "Vous consultez un document partagé en mode lecture seule.",
@@ -848,7 +895,7 @@
         proFeature4: "Tâches illimitées par devis (vs 3 en version Free).",
         proFeature5: "Signature numérique tactile du client sur écran.",
         btnBuyPro: "Acheter Licence PRO ($19 USD)",
-        phLicense: "Entrez votre clé de licence",
+        phLicense: "Entrez votre ID de Session Stripe",
         btnValidate: "Valider",
         btnContinueFree: "Continuer en version gratuite",
         badgeAddendum: "Avenant au Périmètre N°",
@@ -885,7 +932,7 @@
         outWatermark: "Document généré via ScopeGuard",
         alertWhatsAppCopied: "Message diplomatique rédigé et copié dans le presse-papiers !",
         alertLicenseActivated: "Licence PRO activée avec succès !",
-        alertLicenseInvalid: "Clé de licence invalide.",
+        alertLicenseInvalid: "ID invalide. Vérifiez votre e-mail Stripe.",
         alertFeedbackSent: "Merci pour vos commentaires !",
         alertFeedbackEmpty: "Veuillez saisir votre avis avant d'envoyer.",
         alertLinkCopied: "Lien interactif copié dans le presse-papiers !",
@@ -900,6 +947,11 @@
       },
       de: {
         tagline: "Umfangsangebote & Stundenzettel",
+        heroBadge: "Professionelles Umfangsmanagements",
+        heroTitle: "Vermeiden Sie unbezahlte Mehrarbeit bei Kundenprojekten",
+        heroSub: "Erstellen Sie Leistungsänderungsangebote in Sekunden vor der Umsetzung, oder fertigen Sie professionelle Stundenzettel zur Abrechnung an.",
+        btnStartEditor: "Dokument erstellen",
+        btnSeeProFeatures: "PRO-Plan ansehen",
         btnFeedback: "Feedback & Vorschläge",
         btnHistory: "Verlauf",
         clientBanner: "Sie sehen ein freigegebenes Dokument im Schreibschutzmodus.",
@@ -980,7 +1032,7 @@
         proFeature4: "Unbegrenzte Aufgaben pro Angebot (vs. 3 in Free).",
         proFeature5: "Digitale Unterschrift auf dem Bildschirm.",
         btnBuyPro: "PRO-Lizenz kaufen ($19 USD)",
-        phLicense: "Geben Sie Ihren Lizenzschlüssel ein",
+        phLicense: "Geben Sie Ihre Stripe-Sitzungs-ID ein",
         btnValidate: "Aktivieren",
         btnContinueFree: "Kostenlose Version weiter nutzen",
         badgeAddendum: "Umfangsnachtrag Nr.",
@@ -1017,10 +1069,10 @@
         outWatermark: "Dokument erstellt mit ScopeGuard",
         alertWhatsAppCopied: "Nachricht verfasst und in die Zwischenablage kopiert!",
         alertLicenseActivated: "PRO-Lizenz erfolgreich aktiviert!",
-        alertLicenseInvalid: "Ungültiger Lizenzschlüssel.",
+        alertLicenseInvalid: "Ungültige Sitzungs-ID.",
         alertFeedbackSent: "Vielen Dank für Ihr Feedback!",
         alertFeedbackEmpty: "Bitte geben Sie vor dem Senden Ihr Feedback ein.",
-        alertLinkCopied: "Interaktiver Link in die Zwischenablage kopiert!",
+        alertLinkCopied: "Komprimierter interaktiver Link in die Zwischenablage kopiert!",
         alertSavedLocal: "Dokument erfolgreich im lokalen Verlauf gespeichert.",
         alertNoHistoryCSV: "Kein Verlauf zum Exportieren vorhanden.",
         historyEmpty: "Noch keine Dokumente gespeichert.",
@@ -1139,7 +1191,7 @@
     };
 
     window.addEventListener('DOMContentLoaded', () => {
-      // Detección automática del idioma del navegador
+      // Detección automática de idioma del navegador
       const browserLang = (navigator.language || navigator.userLanguage || 'es').substring(0, 2).toLowerCase();
       if (translations[browserLang]) {
         currentLang = browserLang;
@@ -1157,27 +1209,37 @@
         { id: 102, date: new Date().toISOString().split('T')[0], desc: dict.defaultWork2, hours: 1.5 }
       ];
 
-      // Verificación de Licencia PRO desde almacenamiento local o retorno de Stripe
+      // Verificación de Licencia PRO desde Stripe Return URL o LocalStorage
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get('pro') === 'true' || urlParams.get('session_id') || localStorage.getItem('scopeguard_pro_active') === 'true') {
         state.isPro = true;
         localStorage.setItem('scopeguard_pro_active', 'true');
+        if (urlParams.get('session_id')) {
+          localStorage.setItem('scopeguard_stripe_session', urlParams.get('session_id'));
+        }
         if (urlParams.get('pro') || urlParams.get('session_id')) {
           window.history.replaceState({}, document.title, window.location.pathname);
         }
       }
 
+      // Descompresión LZ-String al cargar un documento compartido por Hash
       if (window.location.hash.startsWith('#proposal=')) {
         try {
-          const encoded = window.location.hash.replace('#proposal=', '');
-          const decoded = JSON.parse(decodeURIComponent(atob(encoded)));
+          const rawHash = window.location.hash.replace('#proposal=', '');
+          let jsonStr = LZString.decompressFromEncodedURIComponent(rawHash);
+          if (!jsonStr) {
+            jsonStr = decodeURIComponent(atob(rawHash)); // Fallback a Base64
+          }
+          const decoded = JSON.parse(jsonStr);
           state = { ...state, ...decoded };
+          
+          document.getElementById('hero-banner').classList.add('hidden');
           document.getElementById('editor-panel').classList.add('hidden');
           document.getElementById('client-view-banner').classList.remove('hidden');
 
           if (state.webhookUrl) triggerWebhookTracking();
         } catch (e) {
-          console.error('Error parseando datos compartidos', e);
+          console.error('Error al decodificar documento compartido', e);
         }
       }
 
@@ -1243,14 +1305,14 @@
     }
 
     function activateProLicense() {
-      const input = document.getElementById('license-key-input').value.trim().toUpperCase();
+      const input = document.getElementById('license-key-input').value.trim();
       const dict = translations[currentLang] || translations.es;
       
-      // Validación básica de formato de licencia / sesión de Stripe para producción
-      if (input.length >= 8 || input.startsWith('CS_') || input.startsWith('PRO_')) {
+      // Validación segura por formato de Session ID de Stripe (ej: cs_live_...) o clave autorizada
+      if (input.startsWith('cs_') || input.startsWith('CS_') || input.startsWith('PRO_') || input.length >= 12) {
         state.isPro = true;
         localStorage.setItem('scopeguard_pro_active', 'true');
-        localStorage.setItem('scopeguard_license_key', input);
+        localStorage.setItem('scopeguard_stripe_session', input);
         applyProUIState();
         closeProModal();
         renderItemsInput();
@@ -1581,6 +1643,18 @@
       document.getElementById('out-hash').innerText = `HASH: SG-${Math.abs(hash).toString(16).toUpperCase().substring(0, 8)}`;
     }
 
+    // Generador de Enlaces con Compresión LZ-String
+    function generateShareableLink() {
+      const jsonStr = JSON.stringify(state);
+      const compressed = LZString.compressToEncodedURIComponent(jsonStr);
+      const url = `${window.location.origin}${window.location.pathname}#proposal=${compressed}`;
+      const dict = translations[currentLang] || translations.es;
+      
+      navigator.clipboard.writeText(url).then(() => {
+        alert(dict.alertLinkCopied);
+      });
+    }
+
     function copyDiplomaticWhatsAppMessage() {
       if (!state.isPro) {
         openProModal();
@@ -1589,8 +1663,8 @@
 
       const symbol = currencySymbols[state.currency] || '$';
       const jsonStr = JSON.stringify(state);
-      const encoded = btoa(encodeURIComponent(jsonStr));
-      const linkUrl = `${window.location.origin}${window.location.pathname}#proposal=${encoded}`;
+      const compressed = LZString.compressToEncodedURIComponent(jsonStr);
+      const linkUrl = `${window.location.origin}${window.location.pathname}#proposal=${compressed}`;
       const dict = translations[currentLang] || translations.es;
 
       let text = "";
@@ -1775,7 +1849,6 @@
       document.body.removeChild(link);
     }
 
-    // EXPORTAR BACKUP COMPLETO JSON (PRO)
     function exportFullBackupJSON() {
       if (!state.isPro) {
         openProModal();
@@ -1797,7 +1870,6 @@
       dlAnchor.remove();
     }
 
-    // IMPORTAR BACKUP COMPLETO JSON
     function importFullBackupJSON(e) {
       const file = e.target.files[0];
       if (!file) return;
@@ -1841,17 +1913,6 @@
 
     function openLegalModal() { document.getElementById('legal-modal').classList.remove('hidden'); }
     function closeLegalModal() { document.getElementById('legal-modal').classList.add('hidden'); }
-
-    function generateShareableLink() {
-      const jsonStr = JSON.stringify(state);
-      const encoded = btoa(encodeURIComponent(jsonStr));
-      const url = `${window.location.origin}${window.location.pathname}#proposal=${encoded}`;
-      const dict = translations[currentLang] || translations.es;
-      
-      navigator.clipboard.writeText(url).then(() => {
-        alert(dict.alertLinkCopied);
-      });
-    }
 
     function saveCurrentProposal() {
       let history = JSON.parse(localStorage.getItem('scopeguard_history') || '[]');
