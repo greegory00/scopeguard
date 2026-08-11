@@ -36,16 +36,17 @@
         </div>
       </div>
       <div class="flex items-center gap-2 sm:gap-3">
-        <!-- Selector de Idioma -->
+        <!-- SELECTOR DE IDIOMA MULTILENGUAJE -->
         <select id="lang-selector" onchange="changeLanguage(this.value)" class="bg-slate-800 text-slate-200 border border-slate-700 text-xs px-2.5 py-2 rounded-lg outline-none cursor-pointer hover:bg-slate-700 transition font-medium">
           <option value="es">🇪🇸 ES</option>
           <option value="en">🇬🇧 EN</option>
           <option value="fr">🇫🇷 FR</option>
+          <option value="de">🇩🇪 DE</option>
         </select>
 
-        <!-- Botón Sugerencias -->
+        <!-- Botón Sugerencias / Feedback -->
         <button onclick="openFeedbackModal()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-2 rounded-lg border border-slate-700 transition flex items-center gap-1.5">
-          <i class="fa-solid fa-comment-dots text-amber-400"></i> <span class="hidden md:inline" data-i18n="btnFeedback">Sugerencias</span>
+          <i class="fa-solid fa-comment-dots text-amber-400"></i> <span class="hidden md:inline" data-i18n="btnFeedback">Sugerencias y Opinión</span>
         </button>
 
         <!-- Historial -->
@@ -53,7 +54,7 @@
           <i class="fa-solid fa-folder-open text-indigo-400"></i> <span class="hidden sm:inline" data-i18n="btnHistory">Historial</span> (<span id="history-count">0</span>)
         </button>
 
-        <!-- Botón Estado PRO -->
+        <!-- Botón Estado PRO & Transición -->
         <button id="btn-pro-action" class="text-xs sm:text-sm font-semibold px-3 py-2 rounded-lg transition flex items-center gap-1.5 shadow-md">
           <!-- Dinámico vía JS -->
         </button>
@@ -61,7 +62,7 @@
     </div>
   </header>
 
-  <!-- BANNER VISTA CLIENTE -->
+  <!-- READ ONLY CLIENT VIEW BANNER -->
   <div id="client-view-banner" class="hidden bg-indigo-600 text-white text-center py-2 px-4 text-sm font-medium no-print flex justify-between items-center">
     <span id="client-banner-text"><i class="fa-solid fa-eye mr-2"></i> <span data-i18n="clientBanner">Estás viendo un documento compartido en modo lectura.</span></span>
     <button onclick="resetApp()" class="bg-indigo-800 hover:bg-indigo-900 text-xs px-3 py-1 rounded" data-i18n="btnNewDoc">Crear Nuevo Documento</button>
@@ -70,10 +71,10 @@
   <!-- MAIN CONTAINER -->
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
     
-    <!-- LEFT PANEL: FORMULARIO -->
+    <!-- LEFT PANEL: EDITOR FORM (NO-PRINT) -->
     <section id="editor-panel" class="lg:col-span-6 space-y-6 no-print">
       
-      <!-- PESTAÑAS DE MODO -->
+      <!-- MODE SELECTOR TABS -->
       <div class="bg-slate-200 p-1 rounded-xl flex gap-1 font-medium text-xs">
         <button id="tab-proposal" onclick="setMode('proposal')" class="flex-1 py-2 px-3 rounded-lg transition text-center flex items-center justify-center gap-2 bg-white text-indigo-700 shadow-sm font-bold">
           <i class="fa-solid fa-calculator"></i> <span data-i18n="tabProposal">Presupuesto Previo</span>
@@ -83,7 +84,7 @@
         </button>
       </div>
 
-      <!-- FORMULARIO DATOS GENERALES -->
+      <!-- GENERAL DETAILS FORM -->
       <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-5">
         <div class="border-b border-slate-100 pb-4">
           <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
@@ -109,8 +110,13 @@
             <select id="currency" onchange="updateProposal()" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition bg-white">
               <option value="EUR">EUR (€)</option>
               <option value="USD">USD ($)</option>
-              <option value="GBP">GBP (£)</option>
               <option value="MXN">MXN ($)</option>
+              <option value="COP">COP ($)</option>
+              <option value="ARS">ARS ($)</option>
+              <option value="CLP">CLP ($)</option>
+              <option value="PEN">PEN (S/)</option>
+              <option value="GBP">GBP (£)</option>
+              <option value="BRL">BRL (R$)</option>
             </select>
           </div>
           <div>
@@ -127,14 +133,14 @@
           </div>
         </div>
 
-        <!-- PANEL PRO -->
+        <!-- PANEL DE PERSONALIZACIÓN PRO -->
         <div id="pro-customization-panel" class="hidden border-t border-amber-200/80 pt-4 mt-2 bg-amber-50/50 p-4 rounded-xl space-y-4">
           <div class="flex items-center justify-between border-b border-amber-200/60 pb-2">
             <span class="text-xs font-bold text-amber-900 flex items-center gap-1.5">
               <i class="fa-solid fa-crown text-amber-600"></i> <span data-i18n="titleProPanel">Funciones de Marca Blanca & Cobro (PRO)</span>
             </span>
             <button onclick="toggleProState()" class="text-[11px] bg-amber-200/70 hover:bg-amber-300/80 text-amber-900 font-semibold px-2.5 py-1 rounded-md transition flex items-center gap-1">
-              <i class="fa-solid fa-flask"></i> <span data-i18n="btnTestFree">Probar FREE</span>
+              <i class="fa-solid fa-flask"></i> <span data-i18n="btnTestFree">Cambiar a FREE (Prueba)</span>
             </button>
           </div>
 
@@ -158,51 +164,65 @@
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
             <div>
-              <label class="block font-medium text-slate-700 mb-1" data-i18n="labelPaymentUrl">Enlace de Cobro / Anticipo</label>
-              <input type="url" id="paymentUrlInput" placeholder="https://buy.stripe.com/..." oninput="updatePaymentUrl(this.value)" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs outline-none focus:ring-1 focus:ring-emerald-500">
+              <label class="block font-medium text-slate-700 mb-1">
+                <i class="fa-solid fa-credit-card text-emerald-600 mr-1"></i> <span data-i18n="labelPaymentUrl">Enlace de Cobro / Anticipo (Stripe, PayPal...)</span>
+              </label>
+              <input type="url" id="paymentUrlInput" placeholder="https://buy.stripe.com/... o paypal.me/..." oninput="updatePaymentUrl(this.value)" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs outline-none focus:ring-1 focus:ring-emerald-500">
             </div>
 
             <div>
               <label class="block font-medium text-slate-700 mb-1" data-i18n="labelLegalTemplate">Plantilla de Condiciones Legales</label>
               <select id="legalTemplateSelect" onchange="changeLegalTemplate(this.value)" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs bg-white outline-none">
-                <option value="standard" data-i18n="legalStandard">Estándar (Aprobación previa)</option>
-                <option value="advance_50" data-i18n="legalAdvance50">50% por Adelantado</option>
-                <option value="strict_delay" data-i18n="legalStrictDelay">Caducidad en 5 días</option>
-                <option value="ip_retention" data-i18n="legalIpRetention">Reserva Propiedad Intelectual</option>
+                <option value="standard" data-i18n="legalStandard">Estándar (Aprobación previa requerida)</option>
+                <option value="advance_50" data-i18n="legalAdvance50">Abono del 50% por Adelantado</option>
+                <option value="strict_delay" data-i18n="legalStrictDelay">Caducidad de Oferta en 5 días</option>
+                <option value="ip_retention" data-i18n="legalIpRetention">Reserva de Propiedad Intelectual</option>
               </select>
             </div>
           </div>
 
-          <div class="pt-2">
-            <label class="flex items-center gap-2 cursor-pointer text-xs text-slate-700">
-              <input type="checkbox" id="hideWatermark" onchange="toggleWatermarkSetting(this.checked)" class="rounded text-amber-600 focus:ring-amber-500">
-              <span class="font-medium" data-i18n="labelHideWatermark">Ocultar pie "ScopeGuard" (Marca Blanca)</span>
-            </label>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <div>
+              <label class="block font-medium text-slate-700 mb-1" data-i18n="labelWebhookUrl">Webhook Seguimiento de Lectura (URL)</label>
+              <input type="url" id="webhookUrlInput" placeholder="https://webhook.site/..." oninput="updateWebhookUrl(this.value)" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs outline-none focus:ring-1 focus:ring-amber-500">
+            </div>
+
+            <div class="pt-4">
+              <label class="flex items-center gap-2 cursor-pointer text-xs text-slate-700">
+                <input type="checkbox" id="hideWatermark" onchange="toggleWatermarkSetting(this.checked)" class="rounded text-amber-600 focus:ring-amber-500">
+                <span class="font-medium" data-i18n="labelHideWatermark">Ocultar pie "ScopeGuard" (Marca Blanca)</span>
+              </label>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- TAREAS DINÁMICAS -->
+      <!-- DYNAMIC TASKS SECTION -->
       <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
         <div class="flex items-center justify-between border-b border-slate-100 pb-3">
           <div>
             <h3 class="text-md font-bold text-slate-900" id="tasks-title" data-i18n="titleTasks">Tareas / Cambios Solicitados</h3>
-            <p class="text-xs text-slate-500" id="tasks-sub" data-i18n="subTasks">Desglosa las tareas y horas asociadas.</p>
+            <p class="text-xs text-slate-500" id="tasks-sub" data-i18n="subTasksProposal">Desglosa las tareas y horas asociadas.</p>
           </div>
           <button onclick="addItem()" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold px-3 py-1.5 rounded-lg border border-indigo-200 transition flex items-center gap-1">
             <i class="fa-solid fa-plus"></i> <span id="add-btn-label" data-i18n="btnAddTask">Añadir Tarea</span>
           </button>
         </div>
 
-        <div id="items-container" class="space-y-3"></div>
-        <div id="task-limit-badge" class="text-right text-[11px] text-slate-400"></div>
+        <div id="items-container" class="space-y-3">
+          <!-- Dynamic task rows injected here -->
+        </div>
+
+        <div id="task-limit-badge" class="text-right text-[11px] text-slate-400">
+          <!-- Info de límite tareas -->
+        </div>
       </div>
     </section>
 
-    <!-- RIGHT PANEL: VISTA PREVIA -->
+    <!-- RIGHT PANEL: LIVE PREVIEW & ACTIONS -->
     <section id="preview-panel" class="lg:col-span-6 flex flex-col space-y-4">
       
-      <!-- BOTONERA -->
+      <!-- ACTION BUTTONS TOOLBAR -->
       <div class="no-print bg-white p-3 rounded-xl border border-slate-200/80 shadow-sm flex flex-wrap gap-2 justify-between items-center">
         <div class="flex flex-wrap gap-2">
           <button onclick="window.print()" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-medium px-3.5 py-2 rounded-lg transition flex items-center gap-1.5">
@@ -224,14 +244,14 @@
         </div>
       </div>
 
-      <!-- VISTA PREVIA IMPRESA -->
+      <!-- PREVIEW CARD (PRINTABLE AREA) -->
       <div class="print-card bg-white p-8 rounded-2xl border border-slate-200/80 shadow-xl flex-1 flex flex-col justify-between space-y-8">
         <div class="space-y-6">
           
           <div class="flex justify-between items-start border-b border-slate-200 pb-6">
             <div>
               <span id="badge-mode" class="inline-block bg-amber-100 text-amber-800 text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-md mb-2">
-                Adenda Nº <span id="out-id">001</span>
+                <span id="out-badge-text">Adenda de Alcance Nº</span> <span id="out-id">001</span>
               </span>
               <h2 id="out-doc-title" class="text-2xl font-black text-slate-900 tracking-tight">Presupuesto de Modificación</h2>
               <p class="text-xs text-slate-500 mt-1"><span data-i18n="outDateLabel">Fecha:</span> <span id="out-date">---</span></p>
@@ -260,9 +280,13 @@
             <div class="overflow-hidden border border-slate-200 rounded-xl">
               <table class="w-full text-left text-xs">
                 <thead class="bg-slate-100 text-slate-600 font-semibold border-b border-slate-200">
-                  <tr id="out-table-header"></tr>
+                  <tr id="out-table-header">
+                    <!-- Dinámico vía JS -->
+                  </tr>
                 </thead>
-                <tbody id="out-table-body" class="divide-y divide-slate-100 text-slate-700"></tbody>
+                <tbody id="out-table-body" class="divide-y divide-slate-100 text-slate-700">
+                  <!-- Dynamic preview items -->
+                </tbody>
               </table>
             </div>
           </div>
@@ -288,7 +312,7 @@
             </div>
           </div>
 
-          <!-- BOTÓN DE COBRO DE ANTICIPO -->
+          <!-- BOTÓN DE COBRO DE ANTICIPO DIRECTO EN LA VISTA PREVIA (PRO) -->
           <div id="out-payment-cta-container" class="hidden pt-2 border-t border-dashed border-slate-200 text-center">
             <a id="out-payment-button" href="#" target="_blank" class="inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-md transition w-full sm:w-auto">
               <i class="fa-solid fa-credit-card"></i> <span data-i18n="btnPayAdvance">Pagar / Abonar Anticipo Directamente</span>
@@ -297,7 +321,9 @@
 
           <div class="border-t border-slate-200 pt-4 text-[11px] text-slate-500 space-y-2" id="out-terms-box">
             <p class="font-medium text-slate-600" data-i18n="outTermsHeader">Condiciones de Ejecución:</p>
-            <ul class="list-disc pl-4 space-y-1 text-slate-500" id="out-terms-list"></ul>
+            <ul class="list-disc pl-4 space-y-1 text-slate-500" id="out-terms-list">
+              <!-- Dinámico según plantilla seleccionada -->
+            </ul>
           </div>
         </div>
 
@@ -305,6 +331,7 @@
           <div>
             <p id="out-watermark-text">Documento generado vía ScopeGuard</p>
             <p class="font-mono mt-0.5" id="out-hash">HASH: ---</p>
+            <button onclick="openLegalModal()" class="no-print underline text-slate-400 hover:text-slate-600 mt-1 block" data-i18n="legalTermsLink">Términos y Privacidad</button>
           </div>
           
           <div class="text-right flex flex-col items-end">
@@ -332,31 +359,82 @@
         </h3>
         <button onclick="closeFeedbackModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
       </div>
-      <textarea id="feedbackText" rows="4" class="w-full p-3 border border-slate-300 rounded-xl outline-none text-xs" placeholder="Escribe aquí tu opinión..."></textarea>
+      <p class="text-xs text-slate-600" data-i18n="modalFeedbackText">ScopeGuard se encuentra en fase Beta. Ayúdanos a mejorar contándonos qué otra función te gustaría ver o si has encontrado algún fallo:</p>
+      
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1" data-i18n="labelFeedbackMsg">Tu Mensaje o Sugerencia</label>
+          <textarea id="feedbackText" rows="4" data-i18n-placeholder="phFeedbackMsg" placeholder="Escribe aquí tu opinión o idea..." class="w-full p-3 border border-slate-300 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-xs"></textarea>
+        </div>
+      </div>
+
       <div class="flex justify-end gap-2 pt-2 border-t">
         <button onclick="closeFeedbackModal()" class="px-3 py-2 bg-slate-100 text-slate-600 text-xs font-semibold rounded-lg" data-i18n="btnCancel">Cancelar</button>
-        <button onclick="sendFeedback()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-lg" data-i18n="btnSend">Enviar</button>
+        <button onclick="sendFeedback()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-lg shadow-sm" data-i18n="btnSend">
+          Enviar Opinión
+        </button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL FIRMA CANVAS -->
+  <!-- MODAL AVISO LEGAL -->
+  <div id="legal-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print">
+    <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-slate-200 space-y-4 max-h-[85vh] flex flex-col">
+      <div class="flex justify-between items-center border-b pb-3">
+        <h3 class="font-bold text-slate-900 text-md flex items-center gap-2">
+          <i class="fa-solid fa-scale-balanced text-indigo-600"></i> <span data-i18n="modalLegalTitle">Aviso Legal y Privacidad</span>
+        </h3>
+        <button onclick="closeLegalModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      
+      <div class="flex-1 overflow-y-auto text-xs text-slate-600 space-y-4 pr-1">
+        <div class="bg-indigo-50/60 p-3 rounded-xl border border-indigo-100">
+          <h4 class="font-bold text-indigo-950 mb-1 flex items-center gap-1.5"><i class="fa-solid fa-user-shield"></i> <span data-i18n="titleLocalFirst">Arquitectura Local-First y Cumplimiento RGPD</span></h4>
+          <p data-i18n="descLocalFirst">ScopeGuard opera 100% en el cliente. Ningún dato de tus clientes, proyectos o presupuestos se envía ni almacena en servidores externos. Todo el historial se conserva en la memoria local de tu dispositivo (`localStorage`).</p>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-slate-800 mb-1" data-i18n="titleLegal1">1. Exención de Responsabilidad en Cálculos</h4>
+          <p data-i18n="descLegal1">Los cálculos de costos, recargos y estimaciones de plazos ofrecidos por esta herramienta son orientativos y automatizados en función de los datos introducidos por el propio usuario. ScopeGuard no garantiza ni se responsabiliza de la exactitud ni del cumplimiento comercial de los acuerdos privados entre el usuario y sus clientes finales.</p>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-slate-800 mb-1" data-i18n="titleLegal2">2. Relación Contractual Neutra</h4>
+          <p data-i18n="descLegal2">ScopeGuard actúa únicamente como un generador de documentos y no forma parte de ninguna relación mercantil, disputa de servicios o impago que pueda surgir entre el profesional y su cliente.</p>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-slate-800 mb-1" data-i18n="titleLegal3">3. Conexión Segura (HTTPS)</h4>
+          <p data-i18n="descLegal3">Toda la navegación y generación de enlaces cifrados en URL se ejecuta bajo protocolo HTTPS seguro con certificados SSL activos.</p>
+        </div>
+      </div>
+
+      <div class="border-t pt-3 flex justify-end">
+        <button onclick="closeLegalModal()" class="px-4 py-2 bg-slate-100 text-slate-700 text-xs font-semibold rounded-lg hover:bg-slate-200" data-i18n="btnUnderstood">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL FIRMA DIGITAL -->
   <div id="signature-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print">
     <div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl border border-slate-200 space-y-4">
       <div class="flex justify-between items-center border-b pb-2">
         <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
-          <i class="fa-solid fa-signature text-indigo-600"></i> <span data-i18n="modalSignTitle">Firma Digital</span>
+          <i class="fa-solid fa-signature text-indigo-600"></i> <span data-i18n="modalSignTitle">Firma Digital del Cliente</span>
         </h3>
         <button onclick="closeSignatureModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
       </div>
+      <p class="text-xs text-slate-500" data-i18n="descSignature">Dibuja tu firma con el ratón o pantalla táctil en el recuadro inferior:</p>
+      
       <div class="border-2 border-dashed border-slate-300 rounded-xl bg-slate-50 overflow-hidden relative">
         <canvas id="signature-canvas" width="380" height="140" class="w-full h-36 cursor-crosshair"></canvas>
       </div>
+
       <div class="flex justify-between items-center pt-2">
-        <button onclick="clearSignatureCanvas()" class="px-3 py-1.5 bg-slate-100 text-slate-600 text-xs font-semibold rounded-lg" data-i18n="btnClear">Limpiar</button>
+        <button onclick="clearSignatureCanvas()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-semibold rounded-lg" data-i18n="btnClear">Limpiar</button>
         <div class="flex gap-2">
           <button onclick="closeSignatureModal()" class="px-3 py-1.5 bg-slate-100 text-slate-600 text-xs font-semibold rounded-lg" data-i18n="btnCancel">Cancelar</button>
-          <button onclick="saveSignature()" class="px-4 py-1.5 bg-indigo-600 text-white text-xs font-semibold rounded-lg" data-i18n="btnSaveSignature">Guardar Firma</button>
+          <button onclick="saveSignature()" class="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-lg shadow-sm" data-i18n="btnSaveSignature">Guardar Firma</button>
         </div>
       </div>
     </div>
@@ -371,10 +449,10 @@
       </div>
       <div id="history-list" class="flex-1 overflow-y-auto space-y-2"></div>
       <div class="border-t pt-3 flex justify-between items-center">
-        <button onclick="exportHistoryToCSV()" class="px-3.5 py-2 bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-semibold rounded-lg flex items-center gap-1.5">
+        <button id="btn-export-csv" onclick="exportHistoryToCSV()" class="px-3.5 py-2 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 text-xs font-semibold rounded-lg flex items-center gap-1.5">
           <i class="fa-solid fa-file-csv"></i> <span data-i18n="btnExportCSV">Exportar Historial (CSV)</span>
         </button>
-        <button onclick="toggleHistoryModal()" class="px-4 py-2 bg-slate-100 text-slate-700 text-xs font-semibold rounded-lg" data-i18n="btnClose">Cerrar</button>
+        <button onclick="toggleHistoryModal()" class="px-4 py-2 bg-slate-100 text-slate-700 text-xs font-semibold rounded-lg hover:bg-slate-200" data-i18n="btnClose">Cerrar</button>
       </div>
     </div>
   </div>
@@ -387,29 +465,38 @@
       </div>
       <div>
         <h3 class="font-black text-xl text-slate-900" data-i18n="modalProTitle">Activar ScopeGuard PRO</h3>
-        <p class="text-xs text-slate-500 mt-1" data-i18n="modalProSub">Marca blanca completa, WhatsApp, cobro de anticipos y firma digital.</p>
+        <p class="text-xs text-slate-500 mt-1" data-i18n="modalProSub">Marca blanca completa, mensajes para WhatsApp, enlaces de cobro y firma digital.</p>
       </div>
+      <ul class="text-left text-xs space-y-2.5 text-slate-700 bg-amber-50/60 p-4 rounded-xl border border-amber-100">
+        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-600"></i> <span data-i18n="proFeature1">Redactor de mensajes diplomáticos para WhatsApp.</span></li>
+        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-600"></i> <span data-i18n="proFeature2">Botón de cobro de anticipo directo (Stripe, PayPal).</span></li>
+        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-600"></i> <span data-i18n="proFeature3">Logo y colores corporativos personalizados.</span></li>
+        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-600"></i> <span data-i18n="proFeature4">Tareas ilimitadas por presupuesto (vs. 3 en Free).</span></li>
+        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-600"></i> <span data-i18n="proFeature5">Firma digital táctil del cliente en pantalla.</span></li>
+      </ul>
 
       <div class="space-y-3 pt-2 border-t border-slate-100">
         <a href="https://buy.stripe.com/3cIcN47iHgZ95PT5Do9IQ00" target="_blank" class="block w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-bold text-sm rounded-xl shadow-lg transition text-center" data-i18n="btnBuyPro">
           Comprar Licencia PRO ($19 USD)
         </a>
+        
         <div class="flex items-center gap-2">
-          <input type="text" id="license-key-input" placeholder="Clave o cupón (ej: TEST100)" class="flex-1 px-3 py-2 text-xs border border-slate-300 rounded-lg outline-none uppercase">
-          <button onclick="activateProLicense()" class="px-3 py-2 bg-slate-800 text-white text-xs font-semibold rounded-lg" data-i18n="btnValidate">Validar</button>
+          <input type="text" id="license-key-input" data-i18n-placeholder="phLicense" placeholder="Introduce tu clave o cupón (ej: TEST100)" class="flex-1 px-3 py-2 text-xs border border-slate-300 rounded-lg outline-none uppercase">
+          <button onclick="activateProLicense()" class="px-3 py-2 bg-slate-800 text-white text-xs font-semibold rounded-lg hover:bg-slate-700" data-i18n="btnValidate">Validar</button>
         </div>
       </div>
+
       <button onclick="closeProModal()" class="text-xs text-slate-400 hover:text-slate-600 underline block mx-auto" data-i18n="btnContinueFree">Seguir usando la versión gratuita</button>
     </div>
   </div>
 
-  <!-- JAVASCRIPT & DICCIONARIOS MULTILENGUAJE -->
+  <!-- JAVASCRIPT LOGIC -->
   <script>
-    // 1. DICCIONARIO DE TRADUCCIÓN EXTENSIBLE (ES, EN, FR...)
+    // 1. DICCIONARIO MULTILENGUAJE COMPLETO (ES, EN, FR, DE)
     const translations = {
       es: {
         tagline: "Presupuestos Previos & Parte de Horas",
-        btnFeedback: "Sugerencias",
+        btnFeedback: "Sugerencias y Opinión",
         btnHistory: "Historial",
         clientBanner: "Estás viendo un documento compartido en modo lectura.",
         btnNewDoc: "Crear Nuevo Documento",
@@ -428,18 +515,23 @@
         urgency50: "Crítico / Fin de Semana (+50%)",
         titleProPanel: "Funciones de Marca Blanca & Cobro (PRO)",
         btnTestFree: "Probar FREE",
+        btnActivatePro: "Activar PRO",
+        btnProActive: "PRO Activo (Probar FREE)",
         labelLogo: "Logo Corporativo",
         labelTheme: "Color Principal del Documento",
-        labelPaymentUrl: "Enlace de Cobro / Anticipo",
+        labelPaymentUrl: "Enlace de Cobro / Anticipo (Stripe, PayPal...)",
         labelLegalTemplate: "Plantilla de Condiciones Legales",
-        legalStandard: "Estándar (Aprobación previa)",
-        legalAdvance50: "50% por Adelantado",
-        legalStrictDelay: "Caducidad en 5 días",
-        legalIpRetention: "Reserva Propiedad Intelectual",
-        labelHideWatermark: "Ocultar pie 'ScopeGuard' (Marca Blanca)",
+        legalStandard: "Estándar (Aprobación previa requerida)",
+        legalAdvance50: "Abono del 50% por Adelantado",
+        legalStrictDelay: "Caducidad de Oferta en 5 días",
+        legalIpRetention: "Reserva de Propiedad Intelectual",
+        labelWebhookUrl: "Webhook Seguimiento de Lectura (URL)",
+        labelHideWatermark: "Ocultar pie \"ScopeGuard\" (Marca Blanca)",
         titleTasks: "Tareas / Cambios Solicitados",
-        subTasks: "Desglosa las tareas y horas asociadas.",
+        subTasksProposal: "Desglosa las tareas y horas asociadas.",
+        subTasksTimesheet: "Indica la fecha, descripción y duración real de cada trabajo.",
         btnAddTask: "Añadir Tarea",
+        btnLogHours: "Registrar Horas",
         btnWhatsApp: "Copiar p/ WhatsApp",
         btnLink: "Enlace",
         btnSave: "Guardar",
@@ -451,42 +543,91 @@
         btnPayAdvance: "Pagar / Abonar Anticipo Directamente",
         outTermsHeader: "Condiciones de Ejecución:",
         btnSign: "Firmar en pantalla",
+        legalTermsLink: "Términos y Privacidad",
         modalFeedbackTitle: "Sugerencias y Opinión",
+        modalFeedbackText: "ScopeGuard se encuentra en fase Beta. Ayúdanos a mejorar contándonos qué otra función te gustaría ver o si has encontrado algún fallo:",
+        labelFeedbackMsg: "Tu Mensaje o Sugerencia",
+        phFeedbackMsg: "Escribe aquí tu opinión o idea...",
         btnCancel: "Cancelar",
-        btnSend: "Enviar",
-        modalSignTitle: "Firma Digital",
+        btnSend: "Enviar Opinión",
+        modalLegalTitle: "Aviso Legal y Privacidad",
+        titleLocalFirst: "Arquitectura Local-First y Cumplimiento RGPD",
+        descLocalFirst: "ScopeGuard opera 100% en el cliente. Ningún dato de tus clientes, proyectos o presupuestos se envía ni almacena en servidores externos. Todo el historial se conserva en la memoria local de tu dispositivo (localStorage).",
+        titleLegal1: "1. Exención de Responsabilidad en Cálculos",
+        descLegal1: "Los cálculos de costos, recargos y estimaciones de plazos ofrecidos por esta herramienta son orientativos y automatizados en función de los datos introducidos por el propio usuario. ScopeGuard no garantiza ni se responsabiliza de la exactitud ni del cumplimiento comercial de los acuerdos privados entre el usuario y sus clientes finales.",
+        titleLegal2: "2. Relación Contractual Neutra",
+        descLegal2: "ScopeGuard actúa únicamente como un generador de documentos y no forma parte de ninguna relación mercantil, disputa de servicios o impago que pueda surgir entre el profesional y su cliente.",
+        titleLegal3: "3. Conexión Segura (HTTPS)",
+        descLegal3: "Toda la navegación y generación de enlaces cifrados en URL se ejecuta bajo protocolo HTTPS seguro con certificados SSL activos.",
+        btnUnderstood: "Entendido",
+        modalSignTitle: "Firma Digital del Cliente",
+        descSignature: "Dibuja tu firma con el ratón o pantalla táctil en el recuadro inferior:",
         btnClear: "Limpiar",
         btnSaveSignature: "Guardar Firma",
         modalHistoryTitle: "Documentos Guardados",
         btnExportCSV: "Exportar Historial (CSV)",
         btnClose: "Cerrar",
         modalProTitle: "Activar ScopeGuard PRO",
-        modalProSub: "Marca blanca completa, WhatsApp, cobro de anticipos y firma digital.",
+        modalProSub: "Marca blanca completa, mensajes para WhatsApp, enlaces de cobro y firma digital.",
+        proFeature1: "Redactor de mensajes diplomáticos para WhatsApp.",
+        proFeature2: "Botón de cobro de anticipo directo (Stripe, PayPal).",
+        proFeature3: "Logo y colores corporativos personalizados.",
+        proFeature4: "Tareas ilimitadas por presupuesto (vs. 3 en Free).",
+        proFeature5: "Firma digital táctil del cliente en pantalla.",
         btnBuyPro: "Comprar Licencia PRO ($19 USD)",
+        phLicense: "Introduce tu clave o cupón (ej: TEST100)",
         btnValidate: "Validar",
         btnContinueFree: "Seguir usando la versión gratuita",
-        badgeAddendum: "Adenda Nº",
+        badgeAddendum: "Adenda de Alcance Nº",
         badgeTimesheet: "Parte de Horas Nº",
         titleProposalDoc: "Presupuesto de Modificación",
         titleTimesheetDoc: "Informe de Horas Ejecutadas",
         subtitleProposalDoc: "Aprobación Previa de Cambios",
         subtitleTimesheetDoc: "Registro de Trabajos A Posteriori",
-        subtotalTasks: "Subtotal Tareas:",
-        subtotalHours: "Total Horas Trabajadas:",
-        totalCost: "Costo Total Adicional:",
-        totalInvoice: "Importe Total a Facturar:",
-        signatureLabelClient: "Conforme / Firma del Cliente",
-        signatureLabelTimesheet: "Recibido y Revisado por Cliente",
+        tableTitleProposal: "Desglose de Tareas Adicionales",
+        tableTitleTimesheet: "Detalle de Tareas e Intervenciones Realizadas",
+        labelSubtotalProposal: "Subtotal Tareas:",
+        labelSubtotalTimesheet: "Total Horas Trabajadas:",
+        labelTotalProposal: "Costo Total Adicional:",
+        labelTotalTimesheet: "Importe Total a Facturar:",
+        labelSignatureClient: "Conforme / Firma del Cliente",
+        labelSignatureTimesheet: "Recibido y Revisado por Cliente",
         dayLabel: "día laborable",
-        daysLabel: "días laborables"
+        daysLabel: "días laborables",
+        thDesc: "Descripción de la Tarea",
+        thHoursEst: "Horas Est.",
+        thRate: "Precio/Hora",
+        thSubtotal: "Subtotal",
+        thDate: "Fecha",
+        thWork: "Trabajo / Intervención",
+        thRealHours: "Horas Reales",
+        defaultClient: "Cliente / Empresa",
+        defaultProject: "Nombre del Proyecto",
+        defaultTaskTitle: "Tarea sin título",
+        defaultWorkTitle: "Intervención sin título",
+        badgeTasksUnlimited: "tareas (Modo PRO Ilimitado)",
+        badgeTasksLimit: "tareas creadas (Límite versión Gratuita)",
+        phTaskDesc: "Descripción de la tarea",
+        phWorkDone: "Trabajo realizado",
+        outWatermark: "Documento generado vía ScopeGuard",
+        alertWhatsAppCopied: "¡Mensaje diplomático redactado y copiado al portapapeles! Listo para pegar en WhatsApp.",
+        alertLicenseActivated: "¡Licencia / Cupón PRO activado correctamente!",
+        alertLicenseInvalid: "Clave o cupón no válido. Introduce TEST100 o tu clave de compra.",
+        alertFeedbackSent: "¡Gracias por tus comentarios! Nos ayudan a mejorar ScopeGuard.",
+        alertFeedbackEmpty: "Por favor, escribe tus comentarios antes de enviar.",
+        alertLinkCopied: "¡Enlace interactivo copiado al portapapeles!",
+        alertSavedLocal: "Documento guardado correctamente en tu historial local.",
+        alertNoHistoryCSV: "No hay historial guardado para exportar.",
+        historyEmpty: "No hay documentos guardados aún.",
+        btnLoad: "Cargar"
       },
       en: {
         tagline: "Scope Proposals & Timesheet Tracker",
-        btnFeedback: "Feedback",
+        btnFeedback: "Feedback & Opinions",
         btnHistory: "History",
         clientBanner: "You are viewing a shared document in read-only mode.",
         btnNewDoc: "Create New Document",
-        tabProposal: "Scope Change Proposal",
+        tabProposal: "Scope Proposal",
         tabTimesheet: "Timesheet Log",
         titleProjectDetails: "Project Details",
         descProposal: "Configure parameters for prior approval of changes.",
@@ -500,19 +641,24 @@
         urgency25: "Rush (+25%)",
         urgency50: "Critical / Weekend (+50%)",
         titleProPanel: "White-Label & Payment Links (PRO)",
-        btnTestFree: "Test FREE Mode",
+        btnTestFree: "Test FREE",
+        btnActivatePro: "Activate PRO",
+        btnProActive: "PRO Active (Test FREE)",
         labelLogo: "Corporate Logo",
         labelTheme: "Document Primary Color",
-        labelPaymentUrl: "Payment / Deposit Link",
+        labelPaymentUrl: "Payment / Deposit Link (Stripe, PayPal...)",
         labelLegalTemplate: "Legal Terms Template",
         legalStandard: "Standard (Prior Approval Required)",
         legalAdvance50: "50% Upfront Deposit Required",
         legalStrictDelay: "Quote Expires in 5 Days",
         legalIpRetention: "Intellectual Property Reserved Until Paid",
-        labelHideWatermark: "Hide 'ScopeGuard' Footer (100% White-Label)",
+        labelWebhookUrl: "Read Tracking Webhook (URL)",
+        labelHideWatermark: "Hide \"ScopeGuard\" footer (100% White-Label)",
         titleTasks: "Requested Tasks / Changes",
-        subTasks: "Break down tasks and estimated hours.",
+        subTasksProposal: "Break down additional tasks and estimated hours.",
+        subTasksTimesheet: "Specify date, description, and actual duration for each task.",
         btnAddTask: "Add Task",
+        btnLogHours: "Log Hours",
         btnWhatsApp: "Copy for WhatsApp",
         btnLink: "Share Link",
         btnSave: "Save",
@@ -521,22 +667,43 @@
         outProjectLabel: "Base Project",
         outUrgencyLabel: "Rush Fee:",
         outDelayLabel: "Schedule Impact:",
-        btnPayAdvance: "Pay / Send Deposit Now",
+        btnPayAdvance: "Pay / Send Deposit Directly",
         outTermsHeader: "Execution Terms:",
         btnSign: "Sign on Screen",
+        legalTermsLink: "Terms & Privacy",
         modalFeedbackTitle: "Feedback & Suggestions",
+        modalFeedbackText: "ScopeGuard is in Beta. Help us improve by letting us know what features you'd like to see or any bugs you've found:",
+        labelFeedbackMsg: "Your Message or Suggestion",
+        phFeedbackMsg: "Type your feedback or idea here...",
         btnCancel: "Cancel",
-        btnSend: "Submit",
-        modalSignTitle: "Digital Signature",
+        btnSend: "Submit Feedback",
+        modalLegalTitle: "Legal & Privacy Notice",
+        titleLocalFirst: "Local-First Architecture & GDPR Compliance",
+        descLocalFirst: "ScopeGuard operates 100% client-side. No customer, project, or quote data is sent or stored on external servers. All history remains in your device's local storage (localStorage).",
+        titleLegal1: "1. Disclaimer on Calculations",
+        descLegal1: "Cost calculations, surcharges, and timeline estimates are guidelines based on user input. ScopeGuard does not guarantee accuracy or legal compliance of private agreements.",
+        titleLegal2: "2. Neutral Contractual Relationship",
+        descLegal2: "ScopeGuard acts purely as a document generator and is not party to commercial disputes between freelancers and clients.",
+        titleLegal3: "3. Secure Connection (HTTPS)",
+        descLegal3: "All navigation and encoded URL links run under secure HTTPS protocol with active SSL certificates.",
+        btnUnderstood: "Understood",
+        modalSignTitle: "Client Digital Signature",
+        descSignature: "Draw your signature using your mouse or touchscreen below:",
         btnClear: "Clear",
         btnSaveSignature: "Save Signature",
         modalHistoryTitle: "Saved Documents",
         btnExportCSV: "Export History (CSV)",
         btnClose: "Close",
-        modalProTitle: "Unlock ScopeGuard PRO",
-        modalProSub: "Full white-label, WhatsApp writer, upfront deposits & digital signature.",
-        btnBuyPro: "Get PRO License ($19 USD)",
-        btnValidate: "Activate",
+        modalProTitle: "Activate ScopeGuard PRO",
+        modalProSub: "Full white-label, WhatsApp writer, upfront deposits, and digital signature.",
+        proFeature1: "Diplomatic message writer for WhatsApp.",
+        proFeature2: "Direct advance payment button (Stripe, PayPal).",
+        proFeature3: "Custom corporate logo & brand colors.",
+        proFeature4: "Unlimited tasks per quote (vs. 3 in Free).",
+        proFeature5: "On-screen client touchscreen digital signature.",
+        btnBuyPro: "Buy PRO License ($19 USD)",
+        phLicense: "Enter key or coupon (e.g. TEST100)",
+        btnValidate: "Validate",
         btnContinueFree: "Continue using free version",
         badgeAddendum: "Scope Addendum No.",
         badgeTimesheet: "Timesheet Log No.",
@@ -544,87 +711,371 @@
         titleTimesheetDoc: "Executed Hours Report",
         subtitleProposalDoc: "Prior Approval of Changes",
         subtitleTimesheetDoc: "Post-Execution Work Log",
-        subtotalTasks: "Tasks Subtotal:",
-        subtotalHours: "Total Worked Hours:",
-        totalCost: "Total Additional Cost:",
-        totalInvoice: "Total Amount to Invoice:",
-        signatureLabelClient: "Agreed & Signed by Client",
-        signatureLabelTimesheet: "Reviewed & Received by Client",
+        tableTitleProposal: "Breakdown of Additional Tasks",
+        tableTitleTimesheet: "Detailed Executed Work Log",
+        labelSubtotalProposal: "Tasks Subtotal:",
+        labelSubtotalTimesheet: "Total Worked Hours:",
+        labelTotalProposal: "Total Additional Cost:",
+        labelTotalTimesheet: "Total Invoice Amount:",
+        labelSignatureClient: "Agreed & Signed by Client",
+        labelSignatureTimesheet: "Reviewed & Received by Client",
         dayLabel: "business day",
-        daysLabel: "business days"
+        daysLabel: "business days",
+        thDesc: "Task Description",
+        thHoursEst: "Est. Hours",
+        thRate: "Hourly Rate",
+        thSubtotal: "Subtotal",
+        thDate: "Date",
+        thWork: "Work / Task",
+        thRealHours: "Real Hours",
+        defaultClient: "Client / Company",
+        defaultProject: "Project Name",
+        defaultTaskTitle: "Untitled task",
+        defaultWorkTitle: "Untitled work",
+        badgeTasksUnlimited: "tasks (Unlimited PRO Mode)",
+        badgeTasksLimit: "tasks created (Free Version Limit)",
+        phTaskDesc: "Task description",
+        phWorkDone: "Work completed",
+        outWatermark: "Document generated via ScopeGuard",
+        alertWhatsAppCopied: "Diplomatic message generated and copied to clipboard! Ready to paste into WhatsApp.",
+        alertLicenseActivated: "PRO License / Coupon activated successfully!",
+        alertLicenseInvalid: "Invalid key or coupon. Enter TEST100 or your purchase key.",
+        alertFeedbackSent: "Thank you for your feedback! It helps us improve ScopeGuard.",
+        alertFeedbackEmpty: "Please enter your feedback before sending.",
+        alertLinkCopied: "Interactive link copied to clipboard!",
+        alertSavedLocal: "Document saved successfully to your local history.",
+        alertNoHistoryCSV: "No saved history to export.",
+        historyEmpty: "No saved documents yet.",
+        btnLoad: "Load"
       },
       fr: {
         tagline: "Devis de Modifications & Relevé d'Heures",
-        btnFeedback: "Avis",
+        btnFeedback: "Avis & Suggestions",
         btnHistory: "Historique",
         clientBanner: "Vous consultez un document partagé en mode lecture seule.",
-        btnNewDoc: "Nouveau Document",
+        btnNewDoc: "Créer Nouveau Document",
         tabProposal: "Devis Préalable",
-        tabTimesheet: "Relevé d'Heures",
+        tabTimesheet: "Relevé d'Heures (Réel)",
         titleProjectDetails: "Détails du Projet",
-        descProposal: "Périmètre de modifications soumis à validation.",
-        descTimesheet: "Saisie des travaux réalisés pour facturation.",
+        descProposal: "Configurez les paramètres pour la validation préalable des changements.",
+        descTimesheet: "Saisissez les travaux réalisés a posteriori pour leur justification.",
         labelClient: "Client / Entreprise",
         labelProject: "Nom du Projet",
         labelCurrency: "Devise",
-        labelRate: "Taux Horaire",
-        labelUrgency: "Majoración Urgence",
-        urgency0: "Standard (0%)",
+        labelRate: "Taux Horaire de Base",
+        labelUrgency: "Frais d'Urgence",
+        urgency0: "Sans frais (0%)",
         urgency25: "Urgent (+25%)",
         urgency50: "Critique / Week-end (+50%)",
-        titleProPanel: "Marque Blanche & Paiement (PRO)",
-        btnTestFree: "Tester Mode FREE",
+        titleProPanel: "Fonctions Marque Blanche & Paiement (PRO)",
+        btnTestFree: "Tester FREE",
+        btnActivatePro: "Activer PRO",
+        btnProActive: "PRO Actif (Tester FREE)",
         labelLogo: "Logo d'Entreprise",
-        labelTheme: "Couleur du Document",
-        labelPaymentUrl: "Lien d'Acompte / Paiement",
+        labelTheme: "Couleur Principale du Document",
+        labelPaymentUrl: "Lien de Paiement / Acompte (Stripe, PayPal...)",
         labelLegalTemplate: "Modèle de Conditions Légales",
-        legalStandard: "Standard (Approbation Préalable)",
+        legalStandard: "Standard (Approbation préalable requise)",
         legalAdvance50: "Acompte de 50% Requis",
-        legalStrictDelay: "Offre Valable 5 Jours",
+        legalStrictDelay: "Validité de l'Offre : 5 Jours",
         legalIpRetention: "Réserve de Propriété Intellectuelle",
-        labelHideWatermark: "Masquer 'ScopeGuard' (100% Marque Blanche)",
-        titleTasks: "Tâches / Modifications",
-        subTasks: "Détaillez les tâches et le nombre d'heures.",
+        labelWebhookUrl: "Webhook Suivi de Lecture (URL)",
+        labelHideWatermark: "Masquer le pied \"ScopeGuard\" (Marque Blanche)",
+        titleTasks: "Tâches / Modifications Demandées",
+        subTasksProposal: "Détallez les tâches et heures estimées.",
+        subTasksTimesheet: "Précisez la date, la description et la durée réelle.",
         btnAddTask: "Ajouter Tâche",
+        btnLogHours: "Enregistrer Heures",
         btnWhatsApp: "Copier p/ WhatsApp",
         btnLink: "Lien",
         btnSave: "Enregistrer",
-        outDateLabel: "Date:",
+        outDateLabel: "Date :",
         outClientLabel: "Client",
         outProjectLabel: "Projet de Base",
-        outUrgencyLabel: "Frais d'Urgence:",
-        outDelayLabel: "Impact sur Délai:",
-        btnPayAdvance: "Payer l'Acompte Directement",
-        outTermsHeader: "Conditions d'Exécution:",
+        outUrgencyLabel: "Frais d'Urgence :",
+        outDelayLabel: "Impact sur le Délai :",
+        btnPayAdvance: "Payer / Verser l'Acompte Directement",
+        outTermsHeader: "Conditions d'Exécution :",
         btnSign: "Signer sur l'écran",
-        modalFeedbackTitle: "Avis et Suggestions",
+        legalTermsLink: "Mentions Légales & Confidentialité",
+        modalFeedbackTitle: "Avis & Suggestions",
+        modalFeedbackText: "ScopeGuard est en phase Bêta. Aidez-nous à l'améliorer en nous faisant part de vos remarques :",
+        labelFeedbackMsg: "Votre Message ou Suggestion",
+        phFeedbackMsg: "Écrivez votre avis ou idée ici...",
         btnCancel: "Annuler",
-        btnSend: "Envoyer",
-        modalSignTitle: "Signature Numérique",
+        btnSend: "Envoyer l'Avis",
+        modalLegalTitle: "Mentions Légales & Confidentialité",
+        titleLocalFirst: "Architecture Local-First & RGPD",
+        descLocalFirst: "ScopeGuard fonctionne à 100% sur le client. Aucune donnée n'est stockée sur des serveurs externes.",
+        titleLegal1: "1. Exonération de Responsabilité",
+        descLegal1: "Les calculs et estimations de délais sont donnés à titre indicatif selon les données saisies par l'utilisateur.",
+        titleLegal2: "2. Relation Contractuelle Neutre",
+        descLegal2: "ScopeGuard agit uniquement en tant que générateur de documents.",
+        titleLegal3: "3. Connexion Sécurisée (HTTPS)",
+        descLegal3: "Toutes les connexions s'effectuent sous protocole HTTPS sécurisé.",
+        btnUnderstood: "Compris",
+        modalSignTitle: "Signature Numérique du Client",
+        descSignature: "Dessinez votre signature avec la souris ou l'écran tactile ci-dessous :",
         btnClear: "Effacer",
         btnSaveSignature: "Enregistrer Signature",
         modalHistoryTitle: "Documents Enregistrés",
-        btnExportCSV: "Exporter (CSV)",
+        btnExportCSV: "Exporter l'Historique (CSV)",
         btnClose: "Fermer",
         modalProTitle: "Activer ScopeGuard PRO",
         modalProSub: "Marque blanche, WhatsApp, acomptes et signature numérique.",
+        proFeature1: "Rédacteur de messages diplomatiques pour WhatsApp.",
+        proFeature2: "Bouton de paiement d'acompte direct (Stripe, PayPal).",
+        proFeature3: "Logo et couleurs d'entreprise personnalisés.",
+        proFeature4: "Tâches illimitées par devis (vs 3 en version Free).",
+        proFeature5: "Signature numérique tactile du client sur écran.",
         btnBuyPro: "Acheter Licence PRO ($19 USD)",
+        phLicense: "Entrez votre clé ou coupon (ex: TEST100)",
         btnValidate: "Valider",
-        btnContinueFree: "Continuer en versión gratuite",
-        badgeAddendum: "Avenant N°",
+        btnContinueFree: "Continuer en version gratuite",
+        badgeAddendum: "Avenant au Périmètre N°",
         badgeTimesheet: "Relevé d'Heures N°",
         titleProposalDoc: "Devis de Modification",
         titleTimesheetDoc: "Rapport d'Heures Exécutées",
-        subtitleProposalDoc: "Approbation Préalable des Changements",
-        subtitleTimesheetDoc: "Suivi des Travaux Réalisés",
-        subtotalTasks: "Sous-total Tâches:",
-        subtotalHours: "Total Heures Travaillées:",
-        totalCost: "Coût Total Additionnel:",
-        totalInvoice: "Montant Total à Facturer:",
-        signatureLabelClient: "Lu et Approuvé par le Client",
-        signatureLabelTimesheet: "Reçu et Vérifié par le Client",
+        subtitleProposalDoc: "Validation Préalable des Changements",
+        subtitleTimesheetDoc: "Registre des Travaux Réalisés",
+        tableTitleProposal: "Détail des Tâches Additionnelles",
+        tableTitleTimesheet: "Détail des Interventions Réalisées",
+        labelSubtotalProposal: "Sous-total Tâches :",
+        labelSubtotalTimesheet: "Total Heures Travaillées :",
+        labelTotalProposal: "Coût Total Additionnel :",
+        labelTotalTimesheet: "Montant Total à Facturer :",
+        labelSignatureClient: "Lu et Approuvé par le Client",
+        labelSignatureTimesheet: "Reçu et Vérifié par le Client",
         dayLabel: "jour ouvrable",
-        daysLabel: "jours ouvrables"
+        daysLabel: "jours ouvrables",
+        thDesc: "Description de la Tâche",
+        thHoursEst: "Heures Est.",
+        thRate: "Prix/Heure",
+        thSubtotal: "Sous-total",
+        thDate: "Date",
+        thWork: "Travail / Intervention",
+        thRealHours: "Heures Réelles",
+        defaultClient: "Client / Entreprise",
+        defaultProject: "Nom du Projet",
+        defaultTaskTitle: "Tâche sans titre",
+        defaultWorkTitle: "Intervention sans titre",
+        badgeTasksUnlimited: "tâches (Mode PRO Illimité)",
+        badgeTasksLimit: "tâches créées (Limite Version Gratuite)",
+        phTaskDesc: "Description de la tâche",
+        phWorkDone: "Travail effectué",
+        outWatermark: "Document généré via ScopeGuard",
+        alertWhatsAppCopied: "Message diplomatique rédigé et copié dans le presse-papiers !",
+        alertLicenseActivated: "Licence / Coupon PRO activé avec succès !",
+        alertLicenseInvalid: "Clé ou coupon non valide.",
+        alertFeedbackSent: "Merci pour vos commentaires !",
+        alertFeedbackEmpty: "Veuillez saisir votre avis avant d'envoyer.",
+        alertLinkCopied: "Lien interactif copié dans le presse-papiers !",
+        alertSavedLocal: "Document enregistré dans votre historique local.",
+        alertNoHistoryCSV: "Aucun historique à exporter.",
+        historyEmpty: "Aucun document enregistré pour le moment.",
+        btnLoad: "Charger"
+      },
+      de: {
+        tagline: "Umfangsangebote & Stundenzettel",
+        btnFeedback: "Feedback & Vorschläge",
+        btnHistory: "Verlauf",
+        clientBanner: "Sie sehen ein freigegebenes Dokument im Schreibschutzmodus.",
+        btnNewDoc: "Neues Dokument erstellen",
+        tabProposal: "Vorab-Angebot",
+        tabTimesheet: "Stundenzettel (Real)",
+        titleProjectDetails: "Projektdaten",
+        descProposal: "Konfigurieren Sie die Parameter für die Vorabgenehmigung.",
+        descTimesheet: "Erfassen Sie nachträglich ausgeführte Arbeiten zur Abrechnung.",
+        labelClient: "Kunde / Firma",
+        labelProject: "Projektname",
+        labelCurrency: "Währung",
+        labelRate: "Basis-Stundensatz",
+        labelUrgency: "Eilzuschlag",
+        urgency0: "Kein Zuschlag (0%)",
+        urgency25: "Dringend (+25%)",
+        urgency50: "Kritisch / Wochenende (+50%)",
+        titleProPanel: "White-Label & Zahlungsfunktionen (PRO)",
+        btnTestFree: "FREE testen",
+        btnActivatePro: "PRO aktivieren",
+        btnProActive: "PRO Aktiv (FREE testen)",
+        labelLogo: "Firmenlogo",
+        labelTheme: "Dokument-Hauptfarbe",
+        labelPaymentUrl: "Zahlungs-/Anzahlungslink (Stripe, PayPal...)",
+        labelLegalTemplate: "Vorlage für Rechtliche Bedingungen",
+        legalStandard: "Standard (Vorabgenehmigung erforderlich)",
+        legalAdvance50: "50% Anzahlung erforderlich",
+        legalStrictDelay: "Angebot verfällt in 5 Tagen",
+        legalIpRetention: "Vorbehalt des geistigen Eigentums",
+        labelWebhookUrl: "Lesebestätigung-Webhook (URL)",
+        labelHideWatermark: "\"ScopeGuard\"-Fußzeile ausblenden (White-Label)",
+        titleTasks: "Angeforderte Aufgaben / Änderungen",
+        subTasksProposal: "Schlüsseln Sie zusätzliche Aufgaben und Stunden auf.",
+        subTasksTimesheet: "Geben Sie Datum, Beschreibung und Dauer an.",
+        btnAddTask: "Aufgabe hinzufügen",
+        btnLogHours: "Stunden erfassen",
+        btnWhatsApp: "Für WhatsApp kopieren",
+        btnLink: "Link teilen",
+        btnSave: "Speichern",
+        outDateLabel: "Datum:",
+        outClientLabel: "Kunde",
+        outProjectLabel: "Basisprojekt",
+        outUrgencyLabel: "Eilzuschlag:",
+        outDelayLabel: "Terminauswirkung:",
+        btnPayAdvance: "Anzahlung direkt leisten",
+        outTermsHeader: "Ausführungsbedingungen:",
+        btnSign: "Auf dem Bildschirm unterschreiben",
+        legalTermsLink: "Impressum & Datenschutz",
+        modalFeedbackTitle: "Feedback & Vorschläge",
+        modalFeedbackText: "ScopeGuard befindet sich in der Beta-Phase. Helfen Sie uns, die App zu verbessern:",
+        labelFeedbackMsg: "Ihre Nachricht oder Ihr Vorschlag",
+        phFeedbackMsg: "Schreiben Sie hier Ihr Feedback oder Ihre Idee...",
+        btnCancel: "Abbrechen",
+        btnSend: "Feedback senden",
+        modalLegalTitle: "Impressum & Datenschutz",
+        titleLocalFirst: "Local-First-Architektur & DSGVO",
+        descLocalFirst: "ScopeGuard läuft zu 100 % im Client. Keine Daten werden an externe Server gesendet.",
+        titleLegal1: "1. Haftungsausschluss für Berechnungen",
+        descLegal1: "Kostenberechnungen und Zeitschätzungen sind Richtwerte auf Basis der Benutzereingaben.",
+        titleLegal2: "2. Neutrale Vertragsbeziehung",
+        descLegal2: "ScopeGuard fungiert rein als Dokumentengenerator.",
+        titleLegal3: "3. Sichere Verbindung (HTTPS)",
+        descLegal3: "Alle Verbindungen laufen über das sichere HTTPS-Protokoll.",
+        btnUnderstood: "Verstanden",
+        modalSignTitle: "Digitale Kundenunterschrift",
+        descSignature: "Zeichnen Sie Ihre Unterschrift unten mit der Maus oder dem Touchscreen:",
+        btnClear: "Löschen",
+        btnSaveSignature: "Unterschrift speichern",
+        modalHistoryTitle: "Gespeicherte Dokumente",
+        btnExportCSV: "Verlauf exportieren (CSV)",
+        btnClose: "Schließen",
+        modalProTitle: "ScopeGuard PRO aktivieren",
+        modalProSub: "Vollständiges White-Label, WhatsApp, Anzahlungen und digitale Unterschrift.",
+        proFeature1: "Diplomatischer Nachrichtengenerator für WhatsApp.",
+        proFeature2: "Direkter Anzahlungs-Button (Stripe, PayPal).",
+        proFeature3: "Individuelles Firmenlogo & Farben.",
+        proFeature4: "Unbegrenzte Aufgaben pro Angebot (vs. 3 in Free).",
+        proFeature5: "Digitale Unterschrift auf dem Bildschirm.",
+        btnBuyPro: "PRO-Lizenz kaufen ($19 USD)",
+        phLicense: "Schlüssel oder Gutschein eingeben (z. B. TEST100)",
+        btnValidate: "Aktivieren",
+        btnContinueFree: "Kostenlose Version weiter nutzen",
+        badgeAddendum: "Umfangsnachtrag Nr.",
+        badgeTimesheet: "Stundenzettel Nr.",
+        titleProposalDoc: "Angebot über Leistungsänderung",
+        titleTimesheetDoc: "Bericht über geleistete Stunden",
+        subtitleProposalDoc: "Vorabgenehmigung von Änderungen",
+        subtitleTimesheetDoc: "Nachträgliche Arbeitserfassung",
+        tableTitleProposal: "Aufschlüsselung zusätzlicher Aufgaben",
+        tableTitleTimesheet: "Detaillierte Aufschlüsselung der Arbeiten",
+        labelSubtotalProposal: "Zwischensumme Aufgaben:",
+        labelSubtotalTimesheet: "Gesamte Arbeitsstunden:",
+        labelTotalProposal: "Gesamte Zusatzkosten:",
+        labelTotalTimesheet: "Rechnungsbetrag Gesamt:",
+        labelSignatureClient: "Einverstanden / Kundenunterschrift",
+        labelSignatureTimesheet: "Geprüft & Erhalten vom Kunden",
+        dayLabel: "Arbeitstag",
+        daysLabel: "Arbeitstage",
+        thDesc: "Beschreibung der Aufgabe",
+        thHoursEst: "Geschätzte Std.",
+        thRate: "Stundensatz",
+        thSubtotal: "Zwischensumme",
+        thDate: "Datum",
+        thWork: "Arbeit / Eingriff",
+        thRealHours: "Echte Std.",
+        defaultClient: "Kunde / Firma",
+        defaultProject: "Projektname",
+        defaultTaskTitle: "Unbenannte Aufgabe",
+        defaultWorkTitle: "Unbenannter Eingriff",
+        badgeTasksUnlimited: "Aufgaben (Unbegrenzter PRO-Modus)",
+        badgeTasksLimit: "Aufgaben erstellt (Limit der kostenlosen Version)",
+        phTaskDesc: "Beschreibung der Aufgabe",
+        phWorkDone: "Ausgeführte Arbeit",
+        outWatermark: "Dokument erstellt mit ScopeGuard",
+        alertWhatsAppCopied: "Nachricht verfasst und in die Zwischenablage kopiert!",
+        alertLicenseActivated: "PRO-Lizenz / Gutschein erfolgreich aktiviert!",
+        alertLicenseInvalid: "Ungültiger Schlüssel oder Gutschein.",
+        alertFeedbackSent: "Vielen Dank für Ihr Feedback!",
+        alertFeedbackEmpty: "Bitte geben Sie vor dem Senden Ihr Feedback ein.",
+        alertLinkCopied: "Interaktiver Link in die Zwischenablage kopiert!",
+        alertSavedLocal: "Dokument erfolgreich im lokalen Verlauf gespeichert.",
+        alertNoHistoryCSV: "Kein Verlauf zum Exportieren vorhanden.",
+        historyEmpty: "Noch keine Dokumente gespeichert.",
+        btnLoad: "Laden"
+      }
+    };
+
+    const legalTemplates = {
+      es: {
+        standard: [
+          "El inicio de estas tareas adicionales requerirá la aprobación explícita de este presupuesto.",
+          "El plazo de entrega global del proyecto original se extenderá según el impacto estimado indicado arriba."
+        ],
+        advance_50: [
+          "Se requiere el abono del 50% del importe de esta adenda antes de dar comienzo a los trabajos.",
+          "El 50% restante se abonará junto con la entrega final y conformidad de la modificación."
+        ],
+        strict_delay: [
+          "Este presupuesto de modificación tiene una validez de 5 días hábiles desde su emisión.",
+          "Si la aprobación por parte del cliente supera dicho plazo, la fecha final de entrega será reprogramada según disponibilidad."
+        ],
+        ip_retention: [
+          "La propiedad intelectual y derechos de explotación del desarrollo no se cederán hasta el pago completo de la adenda.",
+          "Cualquier uso en producción sin haber abonado este presupuesto constituirá un incumplimiento del contrato original."
+        ]
+      },
+      en: {
+        standard: [
+          "Work on these additional tasks will begin only upon explicit approval of this proposal.",
+          "The overall delivery timeline of the original project will be extended according to the estimated impact above."
+        ],
+        advance_50: [
+          "A 50% deposit of this addendum total is required before work commences.",
+          "The remaining 50% will be paid upon final delivery and client acceptance of the change."
+        ],
+        strict_delay: [
+          "This change quote is valid for 5 business days from issuance.",
+          "If client approval exceeds this timeframe, the final delivery date will be rescheduled based on availability."
+        ],
+        ip_retention: [
+          "Intellectual property and exploitation rights will not be transferred until full payment of this addendum.",
+          "Any production use without full payment constitutes a breach of the original agreement."
+        ]
+      },
+      fr: {
+        standard: [
+          "Le début de ces travaux additionnels nécessitera la validation explicite de ce devis.",
+          "Le délai de livraison global du projet initial sera prolongé en fonction de l'impact estimé ci-dessus."
+        ],
+        advance_50: [
+          "Un acompte de 50 % du montant de cet avenant est exigé avant le début des travaux.",
+          "Les 50 % restants seront réglés à la livraison finale et conformité de la modification."
+        ],
+        strict_delay: [
+          "Ce devis de modification est valable 5 jours ouvrés à compter de son émission.",
+          "Si la validation dépasse ce délai, la date de livraison finale sera reprogrammée selon la disponibilité."
+        ],
+        ip_retention: [
+          "La propriété intellectuelle et les droits d'exploitation ne seront cédés qu'après paiement intégral de l'avenant.",
+          "Toute utilisation en production sans règlement constitue une violation du contrat initial."
+        ]
+      },
+      de: {
+        standard: [
+          "Der Beginn dieser zusätzlichen Aufgaben erfordert die ausdrückliche Genehmigung dieses Angebots.",
+          "Der Gesamtliefertermin des ursprünglichen Projekts verlängert sich entsprechend den oben angegebenen Schätzungen."
+        ],
+        advance_50: [
+          "Vor Beginn der Arbeiten ist eine Anzahlung von 50 % des Gesamtbetrags dieser Vereinbarung erforderlich.",
+          "Die restlichen 50 % werden bei der endgültigen Lieferung und Abnahme der Änderung fällig."
+        ],
+        strict_delay: [
+          "Dieses Änderungsangebot ist ab Ausstellungsdatum 5 Werktage gültig.",
+          "Erfolgt die Genehmigung nach dieser Frist, wird das Fertigstellungsdatum je nach Verfügbarkeit neu geplant."
+        ],
+        ip_retention: [
+          "Das geistige Eigentum und die Nutzungsrechte werden erst nach vollständiger Bezahlung dieses Nachtrags übertragen.",
+          "Jede Nutzung in der Produktion ohne vollständige Bezahlung stellt einen Verstoß gegen den ursprünglichen Vertrag dar."
+        ]
       }
     };
 
@@ -655,16 +1106,23 @@
       ]
     };
 
-    const currencySymbols = { EUR: "€", USD: "$", GBP: "£", MXN: "$" };
+    const currencySymbols = { EUR: "€", USD: "$", MXN: "$", COP: "$", ARS: "$", CLP: "$", PEN: "S/", GBP: "£", BRL: "R$" };
+
+    const themeClasses = {
+      indigo: { text: "text-indigo-600", bg: "bg-indigo-600" },
+      emerald: { text: "text-emerald-600", bg: "bg-emerald-600" },
+      sky: { text: "text-sky-600", bg: "bg-sky-600" },
+      rose: { text: "text-rose-600", bg: "bg-rose-600" },
+      slate: { text: "text-slate-800", bg: "bg-slate-800" }
+    };
 
     window.addEventListener('DOMContentLoaded', () => {
       // Detección automática del idioma del navegador
-      const browserLang = (navigator.language || navigator.userLanguage || 'es').substring(0, 2);
+      const browserLang = (navigator.language || navigator.userLanguage || 'es').substring(0, 2).toLowerCase();
       if (translations[browserLang]) {
         currentLang = browserLang;
       }
       document.getElementById('lang-selector').value = currentLang;
-
       document.getElementById('out-date').innerText = new Date().toLocaleDateString(currentLang, { year: 'numeric', month: 'long', day: 'numeric' });
       
       const urlParams = new URLSearchParams(window.location.search);
@@ -683,9 +1141,10 @@
           state = { ...state, ...decoded };
           document.getElementById('editor-panel').classList.add('hidden');
           document.getElementById('client-view-banner').classList.remove('hidden');
+
           if (state.webhookUrl) triggerWebhookTracking();
         } catch (e) {
-          console.error('Error parseando datos', e);
+          console.error('Error parseando datos compartidos', e);
         }
       }
 
@@ -703,16 +1162,28 @@
       currentLang = langKey;
       document.getElementById('out-date').innerText = new Date().toLocaleDateString(currentLang, { year: 'numeric', month: 'long', day: 'numeric' });
       applyTranslations();
-      updateProposal();
+      applyProUIState();
+      setMode(state.mode);
       renderItemsInput();
+      updateProposal();
     }
 
     function applyTranslations() {
-      const dict = translations[currentLang];
+      const dict = translations[currentLang] || translations.es;
+      
+      // Traducir elementos por data-i18n
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
         if (dict[key]) {
           el.innerText = dict[key];
+        }
+      });
+
+      // Traducir placeholders por data-i18n-placeholder
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (dict[key]) {
+          el.placeholder = dict[key];
         }
       });
     }
@@ -730,7 +1201,7 @@
       const badge = document.getElementById('badge-version');
       const btnAction = document.getElementById('btn-pro-action');
       const customPanel = document.getElementById('pro-customization-panel');
-      const dict = translations[currentLang];
+      const dict = translations[currentLang] || translations.es;
 
       if (state.isPro) {
         badge.innerText = 'PRO (Beta)';
@@ -742,7 +1213,7 @@
       } else {
         badge.innerText = 'FREE (Beta)';
         badge.className = 'text-xs bg-slate-800 text-slate-400 border border-slate-700 px-2 py-0.5 rounded-full uppercase tracking-wider select-none';
-        btnAction.innerHTML = `<i class="fa-solid fa-crown"></i> <span>Activar PRO</span>`;
+        btnAction.innerHTML = `<i class="fa-solid fa-crown"></i> <span>${dict.btnActivatePro}</span>`;
         btnAction.className = 'text-xs sm:text-sm bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-semibold px-3 py-2 rounded-lg shadow-md transition flex items-center gap-1.5 cursor-pointer';
         btnAction.onclick = openProModal;
         customPanel.classList.add('hidden');
@@ -751,6 +1222,7 @@
 
     function activateProLicense() {
       const input = document.getElementById('license-key-input').value.trim().toUpperCase();
+      const dict = translations[currentLang] || translations.es;
       if (input === 'PRO2026' || input === 'TEST100' || input === 'PRO' || input.length >= 4) {
         state.isPro = true;
         localStorage.setItem('scopeguard_pro_active', 'true');
@@ -758,8 +1230,9 @@
         closeProModal();
         renderItemsInput();
         updateProposal();
+        alert(dict.alertLicenseActivated);
       } else {
-        alert('Clave no válida.');
+        alert(dict.alertLicenseInvalid);
       }
     }
 
@@ -768,18 +1241,28 @@
       const tabProp = document.getElementById('tab-proposal');
       const tabTime = document.getElementById('tab-timesheet');
       const urgencyContainer = document.getElementById('urgency-container');
-      const dict = translations[currentLang];
+      const modeDesc = document.getElementById('mode-desc-text');
+      const tasksTitle = document.getElementById('tasks-title');
+      const tasksSub = document.getElementById('tasks-sub');
+      const addBtnLabel = document.getElementById('add-btn-label');
+      const dict = translations[currentLang] || translations.es;
 
       if (newMode === 'proposal') {
         tabProp.className = "flex-1 py-2 px-3 rounded-lg transition text-center flex items-center justify-center gap-2 bg-white text-indigo-700 shadow-sm font-bold";
         tabTime.className = "flex-1 py-2 px-3 rounded-lg transition text-center flex items-center justify-center gap-2 text-slate-600 hover:text-slate-900";
         urgencyContainer.classList.remove('hidden');
-        document.getElementById('mode-desc-text').innerText = dict.descProposal;
+        modeDesc.innerText = dict.descProposal;
+        tasksTitle.innerText = dict.titleTasks;
+        tasksSub.innerText = dict.subTasksProposal;
+        addBtnLabel.innerText = dict.btnAddTask;
       } else {
         tabTime.className = "flex-1 py-2 px-3 rounded-lg transition text-center flex items-center justify-center gap-2 bg-white text-indigo-700 shadow-sm font-bold";
         tabProp.className = "flex-1 py-2 px-3 rounded-lg transition text-center flex items-center justify-center gap-2 text-slate-600 hover:text-slate-900";
         urgencyContainer.classList.add('hidden');
-        document.getElementById('mode-desc-text').innerText = dict.descTimesheet;
+        modeDesc.innerText = dict.descTimesheet;
+        tasksTitle.innerText = dict.titleTasksTS;
+        tasksSub.innerText = dict.subTasksTimesheet;
+        addBtnLabel.innerText = dict.btnLogHours;
       }
 
       renderItemsInput();
@@ -844,24 +1327,25 @@
     function renderItemsInput() {
       const container = document.getElementById('items-container');
       const limitBadge = document.getElementById('task-limit-badge');
+      const dict = translations[currentLang] || translations.es;
       container.innerHTML = '';
 
       const currentItems = state.mode === 'proposal' ? state.proposalItems : state.timesheetItems;
       limitBadge.innerText = state.isPro 
-        ? `${currentItems.length} tareas (PRO)` 
-        : `${currentItems.length}/3 tareas (FREE)`;
+        ? `${currentItems.length} ${dict.badgeTasksUnlimited}` 
+        : `${currentItems.length}/3 ${dict.badgeTasksLimit}`;
 
       if (state.mode === 'proposal') {
         state.proposalItems.forEach((item, index) => {
           const row = document.createElement('div');
           row.className = "flex items-center gap-2 bg-slate-50 p-2.5 rounded-lg border border-slate-200 text-xs";
           row.innerHTML = `
-            <input type="text" value="${item.desc}" oninput="updateProposalItem(${index}, 'desc', this.value)" class="flex-1 px-2.5 py-1.5 border border-slate-300 rounded outline-none">
+            <input type="text" placeholder="${dict.phTaskDesc}" value="${item.desc}" oninput="updateProposalItem(${index}, 'desc', this.value)" class="flex-1 px-2.5 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-indigo-500 outline-none">
             <div class="flex items-center gap-1 w-24">
-              <input type="number" min="0.5" step="0.5" value="${item.hours}" oninput="updateProposalItem(${index}, 'hours', parseFloat(this.value) || 0)" class="w-full px-2 py-1.5 border border-slate-300 rounded text-center outline-none">
+              <input type="number" min="0.5" step="0.5" value="${item.hours}" oninput="updateProposalItem(${index}, 'hours', parseFloat(this.value) || 0)" class="w-full px-2 py-1.5 border border-slate-300 rounded text-center focus:ring-1 focus:ring-indigo-500 outline-none">
               <span class="text-slate-500 text-[10px]">hrs</span>
             </div>
-            <button onclick="removeProposalItem(${index})" class="text-slate-400 hover:text-rose-600 px-1.5 py-1"><i class="fa-solid fa-trash"></i></button>
+            <button onclick="removeProposalItem(${index})" class="text-slate-400 hover:text-rose-600 px-1.5 py-1 transition"><i class="fa-solid fa-trash"></i></button>
           `;
           container.appendChild(row);
         });
@@ -870,13 +1354,13 @@
           const row = document.createElement('div');
           row.className = "grid grid-cols-12 gap-2 bg-slate-50 p-2.5 rounded-lg border border-slate-200 text-xs items-center";
           row.innerHTML = `
-            <input type="date" value="${item.date}" onchange="updateTimesheetItem(${index}, 'date', this.value)" class="col-span-3 px-2 py-1.5 border border-slate-300 rounded text-[11px]">
-            <input type="text" value="${item.desc}" oninput="updateTimesheetItem(${index}, 'desc', this.value)" class="col-span-5 px-2.5 py-1.5 border border-slate-300 rounded outline-none">
+            <input type="date" value="${item.date}" onchange="updateTimesheetItem(${index}, 'date', this.value)" class="col-span-3 px-2 py-1.5 border border-slate-300 rounded text-[11px] outline-none">
+            <input type="text" placeholder="${dict.phWorkDone}" value="${item.desc}" oninput="updateTimesheetItem(${index}, 'desc', this.value)" class="col-span-5 px-2.5 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-indigo-500 outline-none">
             <div class="col-span-3 flex items-center gap-1">
-              <input type="number" min="0.25" step="0.25" value="${item.hours}" oninput="updateTimesheetItem(${index}, 'hours', parseFloat(this.value) || 0)" class="w-full px-2 py-1.5 border border-slate-300 rounded text-center outline-none">
+              <input type="number" min="0.25" step="0.25" value="${item.hours}" oninput="updateTimesheetItem(${index}, 'hours', parseFloat(this.value) || 0)" class="w-full px-2 py-1.5 border border-slate-300 rounded text-center focus:ring-1 focus:ring-indigo-500 outline-none">
               <span class="text-slate-500 text-[10px]">h</span>
             </div>
-            <button onclick="removeTimesheetItem(${index})" class="col-span-1 text-slate-400 hover:text-rose-600 text-center"><i class="fa-solid fa-trash"></i></button>
+            <button onclick="removeTimesheetItem(${index})" class="col-span-1 text-slate-400 hover:text-rose-600 text-center py-1 transition"><i class="fa-solid fa-trash"></i></button>
           `;
           container.appendChild(row);
         });
@@ -893,7 +1377,7 @@
         state.proposalItems.push({ id: Date.now(), desc: "Nueva modificación requerida", hours: 2 });
       } else {
         const today = new Date().toISOString().split('T')[0];
-        state.timesheetItems.push({ id: Date.now(), date: today, desc: "Ajuste ejecutado", hours: 1 });
+        state.timesheetItems.push({ id: Date.now(), date: today, desc: "Ajuste / Mantenimiento ejecutado", hours: 1 });
       }
       renderItemsInput();
       updateProposal();
@@ -924,9 +1408,9 @@
     }
 
     function updateProposal() {
-      const dict = translations[currentLang];
-      state.clientName = document.getElementById('clientName').value || 'Cliente / Empresa';
-      state.projectName = document.getElementById('projectName').value || 'Nombre del Proyecto';
+      const dict = translations[currentLang] || translations.es;
+      state.clientName = document.getElementById('clientName').value || dict.defaultClient;
+      state.projectName = document.getElementById('projectName').value || dict.defaultProject;
       state.currency = document.getElementById('currency').value;
       state.hourlyRate = parseFloat(document.getElementById('hourlyRate').value) || 0;
       state.urgency = parseFloat(document.getElementById('urgency').value) || 0;
@@ -953,8 +1437,13 @@
         paymentCtaContainer.classList.add('hidden');
       }
 
+      const termsList = document.getElementById('out-terms-list');
+      const langLegal = legalTemplates[currentLang] || legalTemplates.es;
+      const selectedTerms = (state.isPro && langLegal[state.legalTemplate]) ? langLegal[state.legalTemplate] : langLegal.standard;
+      termsList.innerHTML = selectedTerms.map(term => `<li>${term}</li>`).join('');
+
       const watermarkEl = document.getElementById('out-watermark-text');
-      watermarkEl.innerText = (state.isPro && state.hideWatermark) ? "" : "Documento generado vía ScopeGuard";
+      watermarkEl.innerText = (state.isPro && state.hideWatermark) ? "" : dict.outWatermark;
 
       const sigImg = document.getElementById('signature-img');
       const sigBox = document.getElementById('signature-preview-box');
@@ -973,19 +1462,20 @@
       let subtotal = 0;
 
       if (state.mode === 'proposal') {
-        document.getElementById('badge-mode').innerText = `${dict.badgeAddendum} 001`;
+        document.getElementById('out-badge-text').innerText = dict.badgeAddendum;
         document.getElementById('out-doc-title').innerText = dict.titleProposalDoc;
         document.getElementById('out-subtitle-type').innerText = dict.subtitleProposalDoc;
-        document.getElementById('label-subtotal').innerText = dict.subtotalTasks;
-        document.getElementById('label-total').innerText = dict.totalCost;
+        document.getElementById('out-table-title').innerText = dict.tableTitleProposal;
+        document.getElementById('label-subtotal').innerText = dict.labelSubtotalProposal;
+        document.getElementById('label-total').innerText = dict.labelTotalProposal;
         document.getElementById('out-delay-container').classList.remove('hidden');
-        document.getElementById('out-signature-label').innerText = dict.signatureLabelClient;
+        document.getElementById('out-signature-label').innerText = dict.labelSignatureClient;
         
         tableHeader.innerHTML = `
-          <th class="p-3">Descripción</th>
-          <th class="p-3 text-center">Horas</th>
-          <th class="p-3 text-right">Precio/Hora</th>
-          <th class="p-3 text-right">Subtotal</th>
+          <th class="p-3">${dict.thDesc}</th>
+          <th class="p-3 text-center">${dict.thHoursEst}</th>
+          <th class="p-3 text-right">${dict.thRate}</th>
+          <th class="p-3 text-right">${dict.thSubtotal}</th>
         `;
 
         state.proposalItems.forEach(item => {
@@ -995,7 +1485,7 @@
 
           const tr = document.createElement('tr');
           tr.innerHTML = `
-            <td class="p-3 font-medium text-slate-800">${item.desc || '---'}</td>
+            <td class="p-3 font-medium text-slate-800">${item.desc || dict.defaultTaskTitle}</td>
             <td class="p-3 text-center">${item.hours} h</td>
             <td class="p-3 text-right">${state.hourlyRate.toFixed(2)} ${symbol}</td>
             <td class="p-3 text-right font-semibold">${itemSubtotal.toFixed(2)} ${symbol}</td>
@@ -1004,19 +1494,20 @@
         });
 
       } else {
-        document.getElementById('badge-mode').innerText = `${dict.badgeTimesheet} 001`;
+        document.getElementById('out-badge-text').innerText = dict.badgeTimesheet;
         document.getElementById('out-doc-title').innerText = dict.titleTimesheetDoc;
         document.getElementById('out-subtitle-type').innerText = dict.subtitleTimesheetDoc;
-        document.getElementById('label-subtotal').innerText = dict.subtotalHours;
-        document.getElementById('label-total').innerText = dict.totalInvoice;
+        document.getElementById('out-table-title').innerText = dict.tableTitleTimesheet;
+        document.getElementById('label-subtotal').innerText = dict.labelSubtotalTimesheet;
+        document.getElementById('label-total').innerText = dict.labelTotalTimesheet;
         document.getElementById('out-delay-container').classList.add('hidden');
-        document.getElementById('out-signature-label').innerText = dict.signatureLabelTimesheet;
+        document.getElementById('out-signature-label').innerText = dict.labelSignatureTimesheet;
 
         tableHeader.innerHTML = `
-          <th class="p-3">Fecha</th>
-          <th class="p-3">Trabajo</th>
-          <th class="p-3 text-center">Horas</th>
-          <th class="p-3 text-right">Subtotal</th>
+          <th class="p-3">${dict.thDate}</th>
+          <th class="p-3">${dict.thWork}</th>
+          <th class="p-3 text-center">${dict.thRealHours}</th>
+          <th class="p-3 text-right">${dict.thSubtotal}</th>
         `;
 
         state.timesheetItems.forEach(item => {
@@ -1027,7 +1518,7 @@
           const tr = document.createElement('tr');
           tr.innerHTML = `
             <td class="p-3 text-slate-500 font-mono text-[11px]">${item.date || '---'}</td>
-            <td class="p-3 font-medium text-slate-800">${item.desc || '---'}</td>
+            <td class="p-3 font-medium text-slate-800">${item.desc || dict.defaultWorkTitle}</td>
             <td class="p-3 text-center font-semibold">${item.hours} h</td>
             <td class="p-3 text-right font-semibold">${itemSubtotal.toFixed(2)} ${symbol}</td>
           `;
@@ -1071,40 +1562,79 @@
       const jsonStr = JSON.stringify(state);
       const encoded = btoa(encodeURIComponent(jsonStr));
       const linkUrl = `${window.location.origin}${window.location.pathname}#proposal=${encoded}`;
+      const dict = translations[currentLang] || translations.es;
 
       let text = "";
+
       if (state.mode === 'proposal') {
         let totalHours = state.proposalItems.reduce((acc, i) => acc + i.hours, 0);
         let subtotal = totalHours * state.hourlyRate;
         let total = subtotal * (1 + state.urgency / 100);
         let days = Math.ceil(totalHours / 4);
+        let dayText = days === 1 ? dict.dayLabel : dict.daysLabel;
 
         if (currentLang === 'en') {
           text += `Hi! 👋 I reviewed the requested updates for *${state.projectName}*.\n\n`;
-          text += `To include these changes smoothly, I prepared this scope addendum:\n\n`;
+          text += `To include these changes while maintaining project quality, I prepared this quick scope addendum:\n\n`;
           text += `📌 *Total Additional Cost:* ${total.toFixed(2)} ${symbol}\n`;
-          text += `⏱️ *Schedule Impact:* +${days} business day(s)\n\n`;
-          text += `You can review and approve it here:\n${linkUrl}\n\n`;
+          text += `⏱️ *Schedule Impact:* +${days} ${dayText}\n\n`;
+          text += `You can review the breakdown and approve it here:\n${linkUrl}\n\n`;
           text += `Once approved, I'll start right away. Thanks!`;
         } else if (currentLang === 'fr') {
           text += `Bonjour! 👋 J'ai étudié les modifications pour *${state.projectName}*.\n\n`;
           text += `Voici le devis d'avenant au périmètre du projet:\n\n`;
           text += `📌 *Coût total additionnel:* ${total.toFixed(2)} ${symbol}\n`;
-          text += `⏱️ *Impact sur le délai:* +${days} jour(s) ouvrables\n\n`;
+          text += `⏱️ *Impact sur le délai:* +${days} ${dayText}\n\n`;
           text += `Vous pouvez valider le document ici:\n${linkUrl}\n\n`;
           text += `Dès confirmation, je commence les travaux! Merci.`;
+        } else if (currentLang === 'de') {
+          text += `Hallo! 👋 Ich habe die gewünschten Änderungen für *${state.projectName}* überprüft.\n\n`;
+          text += `Um diese umzusetzen, habe ich diesen Nachtrag erstellt:\n\n`;
+          text += `📌 *Zusatzkosten Gesamt:* ${total.toFixed(2)} ${symbol}\n`;
+          text += `⏱️ *Terminauswirkung:* +${days} ${dayText}\n\n`;
+          text += `Sie können die Details hier einsehen und genehmigen:\n${linkUrl}\n\n`;
+          text += `Sobald Sie Ihr Einverständnis geben, fange ich an. Vielen Dank!`;
         } else {
-          text += `Buenas! 👋 He estado revisando las últimas modificaciones para *${state.projectName}*.\n\n`;
-          text += `Para poder incluirlas, he preparado esta adenda rápida de alcance:\n\n`;
+          text += `Buenas! 👋 He estado revisando las últimas modificaciones que comentamos para *${state.projectName}*.\n\n`;
+          text += `Para poder incluirlas manteniendo la calidad del proyecto, he preparado esta adenda rápida de alcance:\n\n`;
           text += `📌 *Costo total adicional:* ${total.toFixed(2)} ${symbol}\n`;
-          text += `⏱️ *Impacto en plazo:* +${days} días laborables\n\n`;
-          text += `Puedes revisar y firmar desde este enlace:\n${linkUrl}\n\n`;
-          text += `En cuanto lo apruebes, me pongo a ello. ¡Gracias!`;
+          text += `⏱️ *Impacto en plazo:* +${days} ${dayText}\n\n`;
+          text += `Puedes ver el desglose detallado e incluso firmar la conformidad desde este enlace:\n${linkUrl}\n\n`;
+          text += `En cuanto le des el visto bueno, me pongo manos a la obra. Gracias!`;
+        }
+      } else {
+        let totalHours = state.timesheetItems.reduce((acc, i) => acc + i.hours, 0);
+        let total = totalHours * state.hourlyRate;
+
+        if (currentLang === 'en') {
+          text += `Hi! 👋 Here is the final log of worked hours for *${state.projectName}*.\n\n`;
+          text += `📊 *Total Executed Hours:* ${totalHours} hrs\n`;
+          text += `💳 *Total Amount to Invoice:* ${total.toFixed(2)} ${symbol}\n\n`;
+          text += `You can review the detailed task log here:\n${linkUrl}\n\n`;
+          text += `Let me know if you have any questions!`;
+        } else if (currentLang === 'fr') {
+          text += `Bonjour! 👋 Voici le suivi final des heures effectuées pour *${state.projectName}*.\n\n`;
+          text += `📊 *Total heures exécutées:* ${totalHours} hrs\n`;
+          text += `💳 *Montant à facturer:* ${total.toFixed(2)} ${symbol}\n\n`;
+          text += `Vous pouvez consulter le détail complet ici:\n${linkUrl}\n\n`;
+          text += `N'hésitez pas si vous avez des questions!`;
+        } else if (currentLang === 'de') {
+          text += `Hallo! 👋 Hier ist das Protokoll der geleisteten Stunden für *${state.projectName}*.\n\n`;
+          text += `📊 *Geleistete Stunden Gesamt:* ${totalHours} Std.\n`;
+          text += `💳 *Rechnungsbetrag Gesamt:* ${total.toFixed(2)} ${symbol}\n\n`;
+          text += `Sie können die Details hier einsehen:\n${linkUrl}\n\n`;
+          text += `Bei Fragen stehe ich gerne zur Verfügung!`;
+        } else {
+          text += `Hola! 👋 Te comparto el registro final de horas trabajadas para *${state.projectName}*.\n\n`;
+          text += `📊 *Total horas ejecutadas:* ${totalHours} hrs\n`;
+          text += `💳 *Importe a facturar:* ${total.toFixed(2)} ${symbol}\n\n`;
+          text += `Puedes revisar el detalle completo de las tareas aquí:\n${linkUrl}\n\n`;
+          text += `Cualquier duda me dices!`;
         }
       }
 
       navigator.clipboard.writeText(text).then(() => {
-        alert('¡Mensaje copiado en el idioma actual!');
+        alert(dict.alertWhatsAppCopied);
       });
     }
 
@@ -1120,7 +1650,7 @@
             mode: state.mode,
             timestamp: new Date().toISOString()
           })
-        }).catch(() => {});
+        }).catch(err => console.log('Webhook ping sent'));
       } catch (e) {}
     }
 
@@ -1158,6 +1688,7 @@
       sigCanvas.addEventListener('mousedown', startDraw);
       sigCanvas.addEventListener('mousemove', draw);
       sigCanvas.addEventListener('mouseup', stopDraw);
+
       sigCanvas.addEventListener('touchstart', startDraw);
       sigCanvas.addEventListener('touchmove', draw);
       sigCanvas.addEventListener('touchend', stopDraw);
@@ -1167,8 +1698,15 @@
       document.getElementById('signature-modal').classList.remove('hidden');
       clearSignatureCanvas();
     }
-    function closeSignatureModal() { document.getElementById('signature-modal').classList.add('hidden'); }
-    function clearSignatureCanvas() { sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height); }
+
+    function closeSignatureModal() {
+      document.getElementById('signature-modal').classList.add('hidden');
+    }
+
+    function clearSignatureCanvas() {
+      sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
+    }
+
     function saveSignature() {
       state.signatureData = sigCanvas.toDataURL();
       updateProposal();
@@ -1176,19 +1714,26 @@
     }
 
     function exportHistoryToCSV() {
+      const dict = translations[currentLang] || translations.es;
       if (!state.isPro) {
         openProModal();
         return;
       }
+
       let history = JSON.parse(localStorage.getItem('scopeguard_history') || '[]');
-      if (history.length === 0) return;
+      if (history.length === 0) {
+        alert(dict.alertNoHistoryCSV);
+        return;
+      }
 
       let csvContent = "data:text/csv;charset=utf-8,ID,Fecha,Modo,Cliente,Proyecto,Total,Moneda\n";
+
       history.forEach(row => {
         const isProp = row.mode === 'proposal';
         const itemsArr = isProp ? row.data.proposalItems : row.data.timesheetItems;
         const totalHours = itemsArr.reduce((a, b) => a + b.hours, 0);
         const total = totalHours * row.data.hourlyRate * (isProp ? (1 + row.data.urgency / 100) : 1);
+
         csvContent += `"${row.id}","${row.date}","${row.mode}","${row.data.clientName}","${row.data.projectName}","${total.toFixed(2)}","${row.data.currency}"\n`;
       });
 
@@ -1204,28 +1749,50 @@
     function openFeedbackModal() { document.getElementById('feedback-modal').classList.remove('hidden'); }
     function closeFeedbackModal() { document.getElementById('feedback-modal').classList.add('hidden'); }
     function sendFeedback() {
-      alert('¡Gracias!');
+      const text = document.getElementById('feedbackText').value.trim();
+      const dict = translations[currentLang] || translations.es;
+      if (!text) {
+        alert(dict.alertFeedbackEmpty);
+        return;
+      }
+      alert(dict.alertFeedbackSent);
       document.getElementById('feedbackText').value = '';
       closeFeedbackModal();
     }
+
+    function openLegalModal() { document.getElementById('legal-modal').classList.remove('hidden'); }
+    function closeLegalModal() { document.getElementById('legal-modal').classList.add('hidden'); }
 
     function generateShareableLink() {
       const jsonStr = JSON.stringify(state);
       const encoded = btoa(encodeURIComponent(jsonStr));
       const url = `${window.location.origin}${window.location.pathname}#proposal=${encoded}`;
-      navigator.clipboard.writeText(url).then(() => alert('¡Enlace copiado!'));
+      const dict = translations[currentLang] || translations.es;
+      
+      navigator.clipboard.writeText(url).then(() => {
+        alert(dict.alertLinkCopied);
+      });
     }
 
     function saveCurrentProposal() {
       let history = JSON.parse(localStorage.getItem('scopeguard_history') || '[]');
+      const dict = translations[currentLang] || translations.es;
+
       if (!state.isPro && history.length >= 1) {
         openProModal();
         return;
       }
-      history.unshift({ id: Date.now(), date: new Date().toLocaleDateString(), mode: state.mode, data: { ...state } });
+
+      const newEntry = {
+        id: Date.now(),
+        date: new Date().toLocaleDateString(currentLang),
+        mode: state.mode,
+        data: { ...state }
+      };
+      history.unshift(newEntry);
       localStorage.setItem('scopeguard_history', JSON.stringify(history));
       updateHistoryCount();
-      alert('Guardado en historial local.');
+      alert(dict.alertSavedLocal);
     }
 
     function updateHistoryCount() {
@@ -1242,10 +1809,13 @@
     function renderHistoryList() {
       const list = document.getElementById('history-list');
       let history = JSON.parse(localStorage.getItem('scopeguard_history') || '[]');
+      const dict = translations[currentLang] || translations.es;
+      
       if (history.length === 0) {
-        list.innerHTML = `<p class="text-center text-xs text-slate-400 py-6">No hay registros.</p>`;
+        list.innerHTML = `<p class="text-center text-xs text-slate-400 py-6">${dict.historyEmpty}</p>`;
         return;
       }
+
       list.innerHTML = '';
       history.forEach(item => {
         const symbol = currencySymbols[item.data.currency] || '$';
@@ -1255,15 +1825,18 @@
         const total = totalHours * item.data.hourlyRate * (isProp ? (1 + item.data.urgency / 100) : 1);
 
         const div = document.createElement('div');
-        div.className = "flex justify-between items-center bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs";
+        div.className = "flex justify-between items-center bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs hover:border-indigo-300 transition";
         div.innerHTML = `
           <div>
-            <p class="font-bold text-slate-800">${item.data.clientName}</p>
-            <p class="text-[10px] text-slate-400">${item.date} • ${item.data.projectName} • ${total.toFixed(2)} ${symbol}</p>
+            <div class="flex items-center gap-1.5">
+              <span class="text-[9px] px-1.5 py-0.5 rounded font-bold uppercase ${isProp ? 'bg-amber-100 text-amber-800' : 'bg-indigo-100 text-indigo-800'}">${isProp ? 'Presupuesto' : 'Parte Horas'}</span>
+              <p class="font-bold text-slate-800">${item.data.clientName}</p>
+            </div>
+            <p class="text-[10px] text-slate-400 mt-0.5">${item.date} • ${item.data.projectName} • ${total.toFixed(2)} ${symbol}</p>
           </div>
           <div class="flex gap-2">
-            <button onclick="loadProposal(${item.id})" class="px-2.5 py-1 bg-indigo-600 text-white rounded text-[11px]">Cargar</button>
-            <button onclick="deleteHistoryItem(${item.id})" class="px-2 py-1 bg-rose-100 text-rose-600 rounded text-[11px]"><i class="fa-solid fa-trash"></i></button>
+            <button onclick="loadProposal(${item.id})" class="px-2.5 py-1 bg-indigo-600 text-white rounded text-[11px] hover:bg-indigo-700">${dict.btnLoad}</button>
+            <button onclick="deleteHistoryItem(${item.id})" class="px-2 py-1 bg-rose-100 text-rose-600 rounded text-[11px] hover:bg-rose-200"><i class="fa-solid fa-trash"></i></button>
           </div>
         `;
         list.appendChild(div);
