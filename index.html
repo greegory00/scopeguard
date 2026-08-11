@@ -13,7 +13,8 @@
       .no-print { display: none !important; }
       .print-only { display: block !important; }
       body { background: white; color: black; }
-      .print-card { border: 1px solid #e2e8f0; box-shadow: none !important; }
+      .print-card { border: 1px solid #e2e8f0; box-shadow: none !important; break-inside: avoid; }
+      tr, .print-card > div { break-inside: avoid; }
     }
     canvas { touch-action: none; }
   </style>
@@ -30,7 +31,7 @@
         <div>
           <h1 class="font-bold text-lg leading-tight tracking-wide flex items-center gap-2">
             ScopeGuard 
-            <span id="badge-version" class="text-xs bg-slate-800 text-slate-400 border border-slate-700 px-2 py-0.5 rounded-full uppercase tracking-wider font-bold select-none">FREE (Beta)</span>
+            <span id="badge-version" class="text-xs bg-slate-800 text-slate-400 border border-slate-700 px-2 py-0.5 rounded-full uppercase tracking-wider font-bold select-none">FREE</span>
           </h1>
           <p class="text-xs text-slate-400" data-i18n="tagline">Presupuestos Previos & Parte de Horas</p>
         </div>
@@ -139,9 +140,6 @@
             <span class="text-xs font-bold text-amber-900 flex items-center gap-1.5">
               <i class="fa-solid fa-crown text-amber-600"></i> <span data-i18n="titleProPanel">Funciones de Marca Blanca & Cobro (PRO)</span>
             </span>
-            <button onclick="toggleProState()" class="text-[11px] bg-amber-200/70 hover:bg-amber-300/80 text-amber-900 font-semibold px-2.5 py-1 rounded-md transition flex items-center gap-1">
-              <i class="fa-solid fa-flask"></i> <span data-i18n="btnTestFree">Cambiar a FREE (Prueba)</span>
-            </button>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
@@ -390,7 +388,7 @@
       <div class="flex-1 overflow-y-auto text-xs text-slate-600 space-y-4 pr-1">
         <div class="bg-indigo-50/60 p-3 rounded-xl border border-indigo-100">
           <h4 class="font-bold text-indigo-950 mb-1 flex items-center gap-1.5"><i class="fa-solid fa-user-shield"></i> <span data-i18n="titleLocalFirst">Arquitectura Local-First y Cumplimiento RGPD</span></h4>
-          <p data-i18n="descLocalFirst">ScopeGuard opera 100% en el cliente. Ningún dato de tus clientes, proyectos o presupuestos se envía ni almacena en servidores externos. Todo el historial se conserva en la memoria local de tu dispositivo (`localStorage`).</p>
+          <p data-i18n="descLocalFirst">ScopeGuard opera 100% en el cliente. Ningún dato de tus clientes, proyectos o presupuestos se envía ni almacena en servidores externos. Todo el historial se conserva en la memoria local de tu dispositivo (localStorage).</p>
         </div>
 
         <div>
@@ -448,16 +446,25 @@
         <button onclick="toggleHistoryModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
       </div>
       <div id="history-list" class="flex-1 overflow-y-auto space-y-2"></div>
-      <div class="border-t pt-3 flex justify-between items-center">
-        <button id="btn-export-csv" onclick="exportHistoryToCSV()" class="px-3.5 py-2 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 text-xs font-semibold rounded-lg flex items-center gap-1.5">
-          <i class="fa-solid fa-file-csv"></i> <span data-i18n="btnExportCSV">Exportar Historial (CSV)</span>
-        </button>
+      <div class="border-t pt-3 flex flex-wrap justify-between items-center gap-2">
+        <div class="flex gap-2">
+          <button id="btn-export-csv" onclick="exportHistoryToCSV()" class="px-3 py-1.5 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 text-xs font-semibold rounded-lg flex items-center gap-1">
+            <i class="fa-solid fa-file-csv"></i> <span data-i18n="btnExportCSV">Exportar (CSV)</span>
+          </button>
+          <button onclick="exportFullBackupJSON()" class="px-3 py-1.5 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 text-xs font-semibold rounded-lg flex items-center gap-1">
+            <i class="fa-solid fa-download"></i> <span data-i18n="btnExportJSON">Backup (JSON)</span>
+          </button>
+          <label class="px-3 py-1.5 bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-300 text-xs font-semibold rounded-lg flex items-center gap-1 cursor-pointer">
+            <i class="fa-solid fa-upload"></i> <span data-i18n="btnImportJSON">Importar</span>
+            <input type="file" accept=".json" onchange="importFullBackupJSON(event)" class="hidden">
+          </label>
+        </div>
         <button onclick="toggleHistoryModal()" class="px-4 py-2 bg-slate-100 text-slate-700 text-xs font-semibold rounded-lg hover:bg-slate-200" data-i18n="btnClose">Cerrar</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL ACTIVACIÓN PRO -->
+  <!-- MODAL ACTIVACIÓN PRO (STRIPE) -->
   <div id="pro-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print">
     <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-amber-200 space-y-5 text-center relative overflow-hidden">
       <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mx-auto text-2xl font-bold">
@@ -476,12 +483,13 @@
       </ul>
 
       <div class="space-y-3 pt-2 border-t border-slate-100">
-        <a href="https://buy.stripe.com/3cIcN47iHgZ95PT5Do9IQ00" target="_blank" class="block w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-bold text-sm rounded-xl shadow-lg transition text-center" data-i18n="btnBuyPro">
+        <!-- REEMPLAZA ESTE ENLACE POR TU STRIPE PAYMENT LINK REAL -->
+        <a href="https://buy.stripe.com/3cIcN47iHgZ95PT5Do9IQ00" target="_blank" class="block w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-bold text-sm rounded-xl shadow-lg transition text-center hover:opacity-95" data-i18n="btnBuyPro">
           Comprar Licencia PRO ($19 USD)
         </a>
         
         <div class="flex items-center gap-2">
-          <input type="text" id="license-key-input" data-i18n-placeholder="phLicense" placeholder="Introduce tu clave o cupón (ej: TEST100)" class="flex-1 px-3 py-2 text-xs border border-slate-300 rounded-lg outline-none uppercase">
+          <input type="text" id="license-key-input" data-i18n-placeholder="phLicense" placeholder="Introduce tu clave de licencia" class="flex-1 px-3 py-2 text-xs border border-slate-300 rounded-lg outline-none uppercase">
           <button onclick="activateProLicense()" class="px-3 py-2 bg-slate-800 text-white text-xs font-semibold rounded-lg hover:bg-slate-700" data-i18n="btnValidate">Validar</button>
         </div>
       </div>
@@ -514,9 +522,7 @@
         urgency25: "Urgente (+25%)",
         urgency50: "Crítico / Fin de Semana (+50%)",
         titleProPanel: "Funciones de Marca Blanca & Cobro (PRO)",
-        btnTestFree: "Probar FREE",
         btnActivatePro: "Activar PRO",
-        btnProActive: "PRO Activo (Probar FREE)",
         labelLogo: "Logo Corporativo",
         labelTheme: "Color Principal del Documento",
         labelPaymentUrl: "Enlace de Cobro / Anticipo (Stripe, PayPal...)",
@@ -528,6 +534,7 @@
         labelWebhookUrl: "Webhook Seguimiento de Lectura (URL)",
         labelHideWatermark: "Ocultar pie \"ScopeGuard\" (Marca Blanca)",
         titleTasks: "Tareas / Cambios Solicitados",
+        titleTasksTS: "Trabajos / Intervenciones Realizadas",
         subTasksProposal: "Desglosa las tareas y horas asociadas.",
         subTasksTimesheet: "Indica la fecha, descripción y duración real de cada trabajo.",
         btnAddTask: "Añadir Tarea",
@@ -565,7 +572,9 @@
         btnClear: "Limpiar",
         btnSaveSignature: "Guardar Firma",
         modalHistoryTitle: "Documentos Guardados",
-        btnExportCSV: "Exportar Historial (CSV)",
+        btnExportCSV: "Exportar (CSV)",
+        btnExportJSON: "Backup (JSON)",
+        btnImportJSON: "Importar",
         btnClose: "Cerrar",
         modalProTitle: "Activar ScopeGuard PRO",
         modalProSub: "Marca blanca completa, mensajes para WhatsApp, enlaces de cobro y firma digital.",
@@ -575,7 +584,7 @@
         proFeature4: "Tareas ilimitadas por presupuesto (vs. 3 en Free).",
         proFeature5: "Firma digital táctil del cliente en pantalla.",
         btnBuyPro: "Comprar Licencia PRO ($19 USD)",
-        phLicense: "Introduce tu clave o cupón (ej: TEST100)",
+        phLicense: "Introduce tu clave de licencia",
         btnValidate: "Validar",
         btnContinueFree: "Seguir usando la versión gratuita",
         badgeAddendum: "Adenda de Alcance Nº",
@@ -611,15 +620,19 @@
         phWorkDone: "Trabajo realizado",
         outWatermark: "Documento generado vía ScopeGuard",
         alertWhatsAppCopied: "¡Mensaje diplomático redactado y copiado al portapapeles! Listo para pegar en WhatsApp.",
-        alertLicenseActivated: "¡Licencia / Cupón PRO activado correctamente!",
-        alertLicenseInvalid: "Clave o cupón no válido. Introduce TEST100 o tu clave de compra.",
+        alertLicenseActivated: "¡Licencia PRO activada correctamente! Gracias por tu compra.",
+        alertLicenseInvalid: "Clave de licencia no válida. Por favor, comprueba el correo de confirmación de Stripe.",
         alertFeedbackSent: "¡Gracias por tus comentarios! Nos ayudan a mejorar ScopeGuard.",
         alertFeedbackEmpty: "Por favor, escribe tus comentarios antes de enviar.",
         alertLinkCopied: "¡Enlace interactivo copiado al portapapeles!",
         alertSavedLocal: "Documento guardado correctamente en tu historial local.",
         alertNoHistoryCSV: "No hay historial guardado para exportar.",
         historyEmpty: "No hay documentos guardados aún.",
-        btnLoad: "Cargar"
+        btnLoad: "Cargar",
+        defaultTask1: "Añadir módulo de pasarela de pago extra",
+        defaultTask2: "Integración de chat en vivo de soporte",
+        defaultWork1: "Ajuste de estilos en el checkout",
+        defaultWork2: "Resolución de error en envío de emails"
       },
       en: {
         tagline: "Scope Proposals & Timesheet Tracker",
@@ -641,9 +654,7 @@
         urgency25: "Rush (+25%)",
         urgency50: "Critical / Weekend (+50%)",
         titleProPanel: "White-Label & Payment Links (PRO)",
-        btnTestFree: "Test FREE",
         btnActivatePro: "Activate PRO",
-        btnProActive: "PRO Active (Test FREE)",
         labelLogo: "Corporate Logo",
         labelTheme: "Document Primary Color",
         labelPaymentUrl: "Payment / Deposit Link (Stripe, PayPal...)",
@@ -655,6 +666,7 @@
         labelWebhookUrl: "Read Tracking Webhook (URL)",
         labelHideWatermark: "Hide \"ScopeGuard\" footer (100% White-Label)",
         titleTasks: "Requested Tasks / Changes",
+        titleTasksTS: "Executed Work / Tasks",
         subTasksProposal: "Break down additional tasks and estimated hours.",
         subTasksTimesheet: "Specify date, description, and actual duration for each task.",
         btnAddTask: "Add Task",
@@ -692,7 +704,9 @@
         btnClear: "Clear",
         btnSaveSignature: "Save Signature",
         modalHistoryTitle: "Saved Documents",
-        btnExportCSV: "Export History (CSV)",
+        btnExportCSV: "Export (CSV)",
+        btnExportJSON: "Backup (JSON)",
+        btnImportJSON: "Import",
         btnClose: "Close",
         modalProTitle: "Activate ScopeGuard PRO",
         modalProSub: "Full white-label, WhatsApp writer, upfront deposits, and digital signature.",
@@ -702,7 +716,7 @@
         proFeature4: "Unlimited tasks per quote (vs. 3 in Free).",
         proFeature5: "On-screen client touchscreen digital signature.",
         btnBuyPro: "Buy PRO License ($19 USD)",
-        phLicense: "Enter key or coupon (e.g. TEST100)",
+        phLicense: "Enter your license key",
         btnValidate: "Validate",
         btnContinueFree: "Continue using free version",
         badgeAddendum: "Scope Addendum No.",
@@ -738,15 +752,19 @@
         phWorkDone: "Work completed",
         outWatermark: "Document generated via ScopeGuard",
         alertWhatsAppCopied: "Diplomatic message generated and copied to clipboard! Ready to paste into WhatsApp.",
-        alertLicenseActivated: "PRO License / Coupon activated successfully!",
-        alertLicenseInvalid: "Invalid key or coupon. Enter TEST100 or your purchase key.",
+        alertLicenseActivated: "PRO License activated successfully! Thank you for your purchase.",
+        alertLicenseInvalid: "Invalid license key. Please check your Stripe confirmation email.",
         alertFeedbackSent: "Thank you for your feedback! It helps us improve ScopeGuard.",
         alertFeedbackEmpty: "Please enter your feedback before sending.",
         alertLinkCopied: "Interactive link copied to clipboard!",
         alertSavedLocal: "Document saved successfully to your local history.",
         alertNoHistoryCSV: "No saved history to export.",
         historyEmpty: "No saved documents yet.",
-        btnLoad: "Load"
+        btnLoad: "Load",
+        defaultTask1: "Add extra payment gateway module",
+        defaultTask2: "Live support chat integration",
+        defaultWork1: "Checkout styling adjustments",
+        defaultWork2: "Email sending error fix"
       },
       fr: {
         tagline: "Devis de Modifications & Relevé d'Heures",
@@ -768,20 +786,19 @@
         urgency25: "Urgent (+25%)",
         urgency50: "Critique / Week-end (+50%)",
         titleProPanel: "Fonctions Marque Blanche & Paiement (PRO)",
-        btnTestFree: "Tester FREE",
         btnActivatePro: "Activer PRO",
-        btnProActive: "PRO Actif (Tester FREE)",
         labelLogo: "Logo d'Entreprise",
         labelTheme: "Couleur Principale du Document",
         labelPaymentUrl: "Lien de Paiement / Acompte (Stripe, PayPal...)",
         labelLegalTemplate: "Modèle de Conditions Légales",
         legalStandard: "Standard (Approbation préalable requise)",
-        legalAdvance50: "Acompte de 50% Requis",
+        legalAdvance50: "Acompte de 50 % Requis",
         legalStrictDelay: "Validité de l'Offre : 5 Jours",
         legalIpRetention: "Réserve de Propriété Intellectuelle",
         labelWebhookUrl: "Webhook Suivi de Lecture (URL)",
         labelHideWatermark: "Masquer le pied \"ScopeGuard\" (Marque Blanche)",
         titleTasks: "Tâches / Modifications Demandées",
+        titleTasksTS: "Travaux / Interventions Réalisés",
         subTasksProposal: "Détallez les tâches et heures estimées.",
         subTasksTimesheet: "Précisez la date, la description et la durée réelle.",
         btnAddTask: "Ajouter Tâche",
@@ -819,7 +836,9 @@
         btnClear: "Effacer",
         btnSaveSignature: "Enregistrer Signature",
         modalHistoryTitle: "Documents Enregistrés",
-        btnExportCSV: "Exporter l'Historique (CSV)",
+        btnExportCSV: "Exporter (CSV)",
+        btnExportJSON: "Backup (JSON)",
+        btnImportJSON: "Importer",
         btnClose: "Fermer",
         modalProTitle: "Activer ScopeGuard PRO",
         modalProSub: "Marque blanche, WhatsApp, acomptes et signature numérique.",
@@ -829,7 +848,7 @@
         proFeature4: "Tâches illimitées par devis (vs 3 en version Free).",
         proFeature5: "Signature numérique tactile du client sur écran.",
         btnBuyPro: "Acheter Licence PRO ($19 USD)",
-        phLicense: "Entrez votre clé ou coupon (ex: TEST100)",
+        phLicense: "Entrez votre clé de licence",
         btnValidate: "Valider",
         btnContinueFree: "Continuer en version gratuite",
         badgeAddendum: "Avenant au Périmètre N°",
@@ -865,15 +884,19 @@
         phWorkDone: "Travail effectué",
         outWatermark: "Document généré via ScopeGuard",
         alertWhatsAppCopied: "Message diplomatique rédigé et copié dans le presse-papiers !",
-        alertLicenseActivated: "Licence / Coupon PRO activé avec succès !",
-        alertLicenseInvalid: "Clé ou coupon non valide.",
+        alertLicenseActivated: "Licence PRO activée avec succès !",
+        alertLicenseInvalid: "Clé de licence invalide.",
         alertFeedbackSent: "Merci pour vos commentaires !",
         alertFeedbackEmpty: "Veuillez saisir votre avis avant d'envoyer.",
         alertLinkCopied: "Lien interactif copié dans le presse-papiers !",
         alertSavedLocal: "Document enregistré dans votre historique local.",
         alertNoHistoryCSV: "Aucun historique à exporter.",
         historyEmpty: "Aucun document enregistré pour le moment.",
-        btnLoad: "Charger"
+        btnLoad: "Charger",
+        defaultTask1: "Module de paiement supplémentaire",
+        defaultTask2: "Intégration du chat de support",
+        defaultWork1: "Ajustement du style de commande",
+        defaultWork2: "Correction d'erreur d'envoi d'email"
       },
       de: {
         tagline: "Umfangsangebote & Stundenzettel",
@@ -895,9 +918,7 @@
         urgency25: "Dringend (+25%)",
         urgency50: "Kritisch / Wochenende (+50%)",
         titleProPanel: "White-Label & Zahlungsfunktionen (PRO)",
-        btnTestFree: "FREE testen",
         btnActivatePro: "PRO aktivieren",
-        btnProActive: "PRO Aktiv (FREE testen)",
         labelLogo: "Firmenlogo",
         labelTheme: "Dokument-Hauptfarbe",
         labelPaymentUrl: "Zahlungs-/Anzahlungslink (Stripe, PayPal...)",
@@ -909,6 +930,7 @@
         labelWebhookUrl: "Lesebestätigung-Webhook (URL)",
         labelHideWatermark: "\"ScopeGuard\"-Fußzeile ausblenden (White-Label)",
         titleTasks: "Angeforderte Aufgaben / Änderungen",
+        titleTasksTS: "Ausgeführte Arbeiten / Eingriffe",
         subTasksProposal: "Schlüsseln Sie zusätzliche Aufgaben und Stunden auf.",
         subTasksTimesheet: "Geben Sie Datum, Beschreibung und Dauer an.",
         btnAddTask: "Aufgabe hinzufügen",
@@ -946,7 +968,9 @@
         btnClear: "Löschen",
         btnSaveSignature: "Unterschrift speichern",
         modalHistoryTitle: "Gespeicherte Dokumente",
-        btnExportCSV: "Verlauf exportieren (CSV)",
+        btnExportCSV: "Exportieren (CSV)",
+        btnExportJSON: "Backup (JSON)",
+        btnImportJSON: "Importieren",
         btnClose: "Schließen",
         modalProTitle: "ScopeGuard PRO aktivieren",
         modalProSub: "Vollständiges White-Label, WhatsApp, Anzahlungen und digitale Unterschrift.",
@@ -956,7 +980,7 @@
         proFeature4: "Unbegrenzte Aufgaben pro Angebot (vs. 3 in Free).",
         proFeature5: "Digitale Unterschrift auf dem Bildschirm.",
         btnBuyPro: "PRO-Lizenz kaufen ($19 USD)",
-        phLicense: "Schlüssel oder Gutschein eingeben (z. B. TEST100)",
+        phLicense: "Geben Sie Ihren Lizenzschlüssel ein",
         btnValidate: "Aktivieren",
         btnContinueFree: "Kostenlose Version weiter nutzen",
         badgeAddendum: "Umfangsnachtrag Nr.",
@@ -992,15 +1016,19 @@
         phWorkDone: "Ausgeführte Arbeit",
         outWatermark: "Dokument erstellt mit ScopeGuard",
         alertWhatsAppCopied: "Nachricht verfasst und in die Zwischenablage kopiert!",
-        alertLicenseActivated: "PRO-Lizenz / Gutschein erfolgreich aktiviert!",
-        alertLicenseInvalid: "Ungültiger Schlüssel oder Gutschein.",
+        alertLicenseActivated: "PRO-Lizenz erfolgreich aktiviert!",
+        alertLicenseInvalid: "Ungültiger Lizenzschlüssel.",
         alertFeedbackSent: "Vielen Dank für Ihr Feedback!",
         alertFeedbackEmpty: "Bitte geben Sie vor dem Senden Ihr Feedback ein.",
         alertLinkCopied: "Interaktiver Link in die Zwischenablage kopiert!",
         alertSavedLocal: "Dokument erfolgreich im lokalen Verlauf gespeichert.",
         alertNoHistoryCSV: "Kein Verlauf zum Exportieren vorhanden.",
         historyEmpty: "Noch keine Dokumente gespeichert.",
-        btnLoad: "Laden"
+        btnLoad: "Laden",
+        defaultTask1: "Zusätzliches Zahlungsmodul",
+        defaultTask2: "Integration des Support-Chats",
+        defaultWork1: "Checkout-Styling-Anpassung",
+        defaultWork2: "E-Mail-Versandfehler beheben"
       }
     };
 
@@ -1096,14 +1124,8 @@
       legalTemplate: 'standard',
       webhookUrl: '',
       signatureData: null,
-      proposalItems: [
-        { id: 1, desc: "Añadir módulo de pasarela de pago extra", hours: 4 },
-        { id: 2, desc: "Integración de chat en vivo de soporte", hours: 3 }
-      ],
-      timesheetItems: [
-        { id: 101, date: "2026-08-01", desc: "Ajuste de estilos en el checkout", hours: 2.5 },
-        { id: 102, date: "2026-08-03", desc: "Resolución de error en envío de emails", hours: 1.5 }
-      ]
+      proposalItems: [],
+      timesheetItems: []
     };
 
     const currencySymbols = { EUR: "€", USD: "$", MXN: "$", COP: "$", ARS: "$", CLP: "$", PEN: "S/", GBP: "£", BRL: "R$" };
@@ -1125,13 +1147,24 @@
       document.getElementById('lang-selector').value = currentLang;
       document.getElementById('out-date').innerText = new Date().toLocaleDateString(currentLang, { year: 'numeric', month: 'long', day: 'numeric' });
       
+      const dict = translations[currentLang] || translations.es;
+      state.proposalItems = [
+        { id: 1, desc: dict.defaultTask1, hours: 4 },
+        { id: 2, desc: dict.defaultTask2, hours: 3 }
+      ];
+      state.timesheetItems = [
+        { id: 101, date: new Date().toISOString().split('T')[0], desc: dict.defaultWork1, hours: 2.5 },
+        { id: 102, date: new Date().toISOString().split('T')[0], desc: dict.defaultWork2, hours: 1.5 }
+      ];
+
+      // Verificación de Licencia PRO desde almacenamiento local o retorno de Stripe
       const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('pro') === 'true' || urlParams.get('coupon') === 'TEST100') {
+      if (urlParams.get('pro') === 'true' || urlParams.get('session_id') || localStorage.getItem('scopeguard_pro_active') === 'true') {
         state.isPro = true;
         localStorage.setItem('scopeguard_pro_active', 'true');
-        window.history.replaceState({}, document.title, window.location.pathname);
-      } else if (localStorage.getItem('scopeguard_pro_active') === 'true') {
-        state.isPro = true;
+        if (urlParams.get('pro') || urlParams.get('session_id')) {
+          window.history.replaceState({}, document.title, window.location.pathname);
+        }
       }
 
       if (window.location.hash.startsWith('#proposal=')) {
@@ -1171,7 +1204,6 @@
     function applyTranslations() {
       const dict = translations[currentLang] || translations.es;
       
-      // Traducir elementos por data-i18n
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
         if (dict[key]) {
@@ -1179,22 +1211,12 @@
         }
       });
 
-      // Traducir placeholders por data-i18n-placeholder
       document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
         const key = el.getAttribute('data-i18n-placeholder');
         if (dict[key]) {
           el.placeholder = dict[key];
         }
       });
-    }
-
-    function toggleProState() {
-      state.isPro = !state.isPro;
-      if (state.isPro) localStorage.setItem('scopeguard_pro_active', 'true');
-      else localStorage.removeItem('scopeguard_pro_active');
-      applyProUIState();
-      renderItemsInput();
-      updateProposal();
     }
 
     function applyProUIState() {
@@ -1204,14 +1226,14 @@
       const dict = translations[currentLang] || translations.es;
 
       if (state.isPro) {
-        badge.innerText = 'PRO (Beta)';
+        badge.innerText = 'PRO';
         badge.className = 'text-xs bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-full uppercase tracking-wider font-bold select-none';
-        btnAction.innerHTML = `<i class="fa-solid fa-crown text-amber-400"></i> <span>PRO (${dict.btnTestFree})</span>`;
-        btnAction.className = 'text-xs sm:text-sm bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium px-3 py-2 rounded-lg border border-slate-700 flex items-center gap-1.5 cursor-pointer transition';
-        btnAction.onclick = toggleProState;
+        btnAction.innerHTML = `<i class="fa-solid fa-crown text-amber-400"></i> <span>PRO Activo</span>`;
+        btnAction.className = 'text-xs sm:text-sm bg-slate-800 text-amber-400 font-semibold px-3 py-2 rounded-lg border border-slate-700 flex items-center gap-1.5 cursor-default select-none';
+        btnAction.onclick = null;
         customPanel.classList.remove('hidden');
       } else {
-        badge.innerText = 'FREE (Beta)';
+        badge.innerText = 'FREE';
         badge.className = 'text-xs bg-slate-800 text-slate-400 border border-slate-700 px-2 py-0.5 rounded-full uppercase tracking-wider select-none';
         btnAction.innerHTML = `<i class="fa-solid fa-crown"></i> <span>${dict.btnActivatePro}</span>`;
         btnAction.className = 'text-xs sm:text-sm bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-semibold px-3 py-2 rounded-lg shadow-md transition flex items-center gap-1.5 cursor-pointer';
@@ -1223,9 +1245,12 @@
     function activateProLicense() {
       const input = document.getElementById('license-key-input').value.trim().toUpperCase();
       const dict = translations[currentLang] || translations.es;
-      if (input === 'PRO2026' || input === 'TEST100' || input === 'PRO' || input.length >= 4) {
+      
+      // Validación básica de formato de licencia / sesión de Stripe para producción
+      if (input.length >= 8 || input.startsWith('CS_') || input.startsWith('PRO_')) {
         state.isPro = true;
         localStorage.setItem('scopeguard_pro_active', 'true');
+        localStorage.setItem('scopeguard_license_key', input);
         applyProUIState();
         closeProModal();
         renderItemsInput();
@@ -1374,10 +1399,10 @@
         return;
       }
       if (state.mode === 'proposal') {
-        state.proposalItems.push({ id: Date.now(), desc: "Nueva modificación requerida", hours: 2 });
+        state.proposalItems.push({ id: Date.now(), desc: "", hours: 2 });
       } else {
         const today = new Date().toISOString().split('T')[0];
-        state.timesheetItems.push({ id: Date.now(), date: today, desc: "Ajuste / Mantenimiento ejecutado", hours: 1 });
+        state.timesheetItems.push({ id: Date.now(), date: today, desc: "", hours: 1 });
       }
       renderItemsInput();
       updateProposal();
@@ -1412,7 +1437,9 @@
       state.clientName = document.getElementById('clientName').value || dict.defaultClient;
       state.projectName = document.getElementById('projectName').value || dict.defaultProject;
       state.currency = document.getElementById('currency').value;
-      state.hourlyRate = parseFloat(document.getElementById('hourlyRate').value) || 0;
+      
+      const rawRate = parseFloat(document.getElementById('hourlyRate').value);
+      state.hourlyRate = isNaN(rawRate) || rawRate < 0 ? 0 : rawRate;
       state.urgency = parseFloat(document.getElementById('urgency').value) || 0;
 
       const symbol = currencySymbols[state.currency] || '$';
@@ -1479,14 +1506,15 @@
         `;
 
         state.proposalItems.forEach(item => {
-          const itemSubtotal = item.hours * state.hourlyRate;
-          totalHours += item.hours;
+          const itemHours = isNaN(item.hours) || item.hours < 0 ? 0 : item.hours;
+          const itemSubtotal = itemHours * state.hourlyRate;
+          totalHours += itemHours;
           subtotal += itemSubtotal;
 
           const tr = document.createElement('tr');
           tr.innerHTML = `
             <td class="p-3 font-medium text-slate-800">${item.desc || dict.defaultTaskTitle}</td>
-            <td class="p-3 text-center">${item.hours} h</td>
+            <td class="p-3 text-center">${itemHours} h</td>
             <td class="p-3 text-right">${state.hourlyRate.toFixed(2)} ${symbol}</td>
             <td class="p-3 text-right font-semibold">${itemSubtotal.toFixed(2)} ${symbol}</td>
           `;
@@ -1511,15 +1539,16 @@
         `;
 
         state.timesheetItems.forEach(item => {
-          const itemSubtotal = item.hours * state.hourlyRate;
-          totalHours += item.hours;
+          const itemHours = isNaN(item.hours) || item.hours < 0 ? 0 : item.hours;
+          const itemSubtotal = itemHours * state.hourlyRate;
+          totalHours += itemHours;
           subtotal += itemSubtotal;
 
           const tr = document.createElement('tr');
           tr.innerHTML = `
             <td class="p-3 text-slate-500 font-mono text-[11px]">${item.date || '---'}</td>
             <td class="p-3 font-medium text-slate-800">${item.desc || dict.defaultWorkTitle}</td>
-            <td class="p-3 text-center font-semibold">${item.hours} h</td>
+            <td class="p-3 text-center font-semibold">${itemHours} h</td>
             <td class="p-3 text-right font-semibold">${itemSubtotal.toFixed(2)} ${symbol}</td>
           `;
           tableBody.appendChild(tr);
@@ -1744,6 +1773,56 @@
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+    }
+
+    // EXPORTAR BACKUP COMPLETO JSON (PRO)
+    function exportFullBackupJSON() {
+      if (!state.isPro) {
+        openProModal();
+        return;
+      }
+      const history = JSON.parse(localStorage.getItem('scopeguard_history') || '[]');
+      const backupData = {
+        version: "1.0",
+        exportDate: new Date().toISOString(),
+        history: history,
+        currentState: state
+      };
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
+      const dlAnchor = document.createElement('a');
+      dlAnchor.setAttribute("href", dataStr);
+      dlAnchor.setAttribute("download", `scopeguard_backup_${new Date().toISOString().slice(0,10)}.json`);
+      document.body.appendChild(dlAnchor);
+      dlAnchor.click();
+      dlAnchor.remove();
+    }
+
+    // IMPORTAR BACKUP COMPLETO JSON
+    function importFullBackupJSON(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        try {
+          const imported = JSON.parse(evt.target.result);
+          if (imported.history && Array.isArray(imported.history)) {
+            localStorage.setItem('scopeguard_history', JSON.stringify(imported.history));
+            if (imported.currentState) {
+              state = { ...state, ...imported.currentState };
+              syncFormFromState();
+              setMode(state.mode || 'proposal');
+            }
+            updateHistoryCount();
+            renderHistoryList();
+            alert('¡Copia de seguridad restaurada con éxito!');
+          } else {
+            alert('El archivo JSON no tiene un formato válido.');
+          }
+        } catch (err) {
+          alert('Error al leer el archivo de copia de seguridad.');
+        }
+      };
+      reader.readAsText(file);
     }
 
     function openFeedbackModal() { document.getElementById('feedback-modal').classList.remove('hidden'); }
