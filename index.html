@@ -76,7 +76,7 @@
     </div>
   </header>
 
-  <!-- HERO / LANDING SECTION (PROPUESTA DE VALOR) -->
+  <!-- HERO / LANDING SECTION -->
   <section id="hero-banner" class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white py-8 px-4 sm:px-6 lg:px-8 border-b border-slate-800 no-print">
     <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
       <div class="space-y-2 max-w-2xl text-center md:text-left">
@@ -104,7 +104,7 @@
   <!-- MAIN CONTAINER -->
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
     
-    <!-- LEFT PANEL: EDITOR FORM (NO-PRINT) -->
+    <!-- LEFT PANEL: EDITOR FORM -->
     <section id="editor-panel" class="lg:col-span-6 space-y-6 no-print">
       
       <!-- MODE SELECTOR TABS -->
@@ -240,16 +240,16 @@
         </div>
 
         <div id="items-container" class="space-y-3">
-          <!-- Dynamic task rows injected here -->
+          <!-- Dynamic task rows -->
         </div>
 
         <div id="task-limit-badge" class="text-right text-[11px] text-slate-400">
-          <!-- Info de límite tareas -->
+          <!-- Info límite tareas -->
         </div>
       </div>
     </section>
 
-    <!-- RIGHT PANEL: LIVE PREVIEW & ACTIONS -->
+    <!-- RIGHT PANEL: LIVE PREVIEW -->
     <section id="preview-panel" class="lg:col-span-6 flex flex-col space-y-4">
       
       <!-- ACTION BUTTONS TOOLBAR -->
@@ -342,9 +342,9 @@
             </div>
           </div>
 
-          <!-- BOTÓN DE COBRO DE ANTICIPO DIRECTO EN LA VISTA PREVIA (PRO) -->
+          <!-- BOTÓN DE COBRO EN VISTA PREVIA (PRO) -->
           <div id="out-payment-cta-container" class="hidden pt-2 border-t border-dashed border-slate-200 text-center">
-            <a id="out-payment-button" href="#" target="_blank" class="inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-md transition w-full sm:w-auto">
+            <a id="out-payment-button" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-md transition w-full sm:w-auto">
               <i class="fa-solid fa-credit-card"></i> <span data-i18n="btnPayAdvance">Pagar / Abonar Anticipo Directamente</span>
             </a>
           </div>
@@ -352,7 +352,7 @@
           <div class="border-t border-slate-200 pt-4 text-[11px] text-slate-500 space-y-2" id="out-terms-box">
             <p class="font-medium text-slate-600" data-i18n="outTermsHeader">Condiciones de Ejecución:</p>
             <ul class="list-disc pl-4 space-y-1 text-slate-500" id="out-terms-list">
-              <!-- Dinámico según plantilla seleccionada -->
+              <!-- Dinámico -->
             </ul>
           </div>
         </div>
@@ -510,7 +510,7 @@
     </div>
   </div>
 
-<!-- MODAL ACTIVACIÓN PRO (STRIPE) -->
+  <!-- MODAL ACTIVACIÓN PRO (STRIPE) -->
   <div id="pro-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print">
     <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-amber-200 space-y-5 text-center relative overflow-hidden">
       <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mx-auto text-2xl font-bold">
@@ -529,21 +529,50 @@
       </ul>
 
       <div class="space-y-3 pt-2 border-t border-slate-100">
-        <a href="https://buy.stripe.com/3cIcN47iHgZ95PT5Do9IQ00" target="_blank" class="block w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-bold text-sm rounded-xl shadow-lg transition text-center" data-i18n="btnBuyPro">
+        <a href="https://buy.stripe.com/3cIcN47iHgZ95PT5Do9IQ00" target="_blank" rel="noopener noreferrer" class="block w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-bold text-sm rounded-xl shadow-lg transition text-center" data-i18n="btnBuyPro">
           Comprar Licencia PRO ($19 USD)
         </a>
       </div>
 
+      <!-- INTERFAZ FALTANTE PARA ACTIVACIÓN DE CLAVE / SESSION ID -->
+      <div class="pt-2 border-t border-slate-100 space-y-2 text-left">
+        <label class="block text-xs font-semibold text-slate-700" data-i18n="phLicense">¿Ya compraste? Introduce tu Session ID o Clave</label>
+        <div class="flex gap-2">
+          <input type="text" id="license-key-input" placeholder="cs_live_... o PRO_..." class="flex-1 px-3 py-2 text-xs border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-amber-500">
+          <button onclick="activateProLicense()" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-semibold text-xs rounded-lg transition" data-i18n="btnValidate">
+            Validar
+          </button>
+        </div>
+      </div>
+
       <div class="space-y-1">
         <button onclick="closeProModal()" class="text-xs text-slate-400 hover:text-slate-600 underline block mx-auto" data-i18n="btnContinueFree">Seguir usando la versión gratuita</button>
-        <p class="text-[10px] text-slate-400 pt-1">¿Dudas o problemas con tu compra? Contacta a <a href="mailto:gregorymunsmi@gmail.com" class="underline hover:text-slate-600">gregorymunsmi@gmail.com</a></p>
+        <p class="text-[10px] text-slate-400 pt-1">¿Dudas con tu compra? Contacta a <a href="mailto:gregorymunsmi@gmail.com" class="underline hover:text-slate-600">gregorymunsmi@gmail.com</a></p>
       </div>
     </div>
   </div>
 
-  <!-- JAVASCRIPT LOGIC -->
+  <!-- JAVASCRIPT LOGIC REFACTORIZADO -->
   <script>
-    // 1. DICCIONARIO MULTILENGUAJE COMPLETO (ES, EN, FR, DE)
+    // HELPER XSS: SANITIZACIÓN DE CADENAS DE TEXTO
+    function escapeHTML(str) {
+      if (typeof str !== 'string') return str === null || str === undefined ? '' : String(str);
+      return str.replace(/[&<>"']/g, function(m) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
+      });
+    }
+
+    // HELPER PROTOCOLO SEGURO DE URL
+    function isValidHttpUrl(string) {
+      try {
+        const url = new URL(string);
+        return url.protocol === "http:" || url.protocol === "https:";
+      } catch (_) {
+        return false;
+      }
+    }
+
+    // 1. DICCIONARIO MULTILENGUAJE COMPLETO
     const translations = {
       es: {
         tagline: "Presupuestos Previos & Parte de Horas",
@@ -635,7 +664,7 @@
         proFeature4: "Tareas ilimitadas por presupuesto (vs. 3 en Free).",
         proFeature5: "Firma digital táctil del cliente en pantalla.",
         btnBuyPro: "Comprar Licencia PRO ($19 USD)",
-        phLicense: "Introduce tu ID de Sesión de Stripe",
+        phLicense: "¿Ya compraste? Introduce tu Session ID o Clave",
         btnValidate: "Validar",
         btnContinueFree: "Seguir usando la versión gratuita",
         badgeAddendum: "Adenda de Alcance Nº",
@@ -775,7 +804,7 @@
         proFeature4: "Unlimited tasks per quote (vs. 3 in Free).",
         proFeature5: "On-screen client touchscreen digital signature.",
         btnBuyPro: "Buy PRO License ($19 USD)",
-        phLicense: "Enter your Stripe Session ID",
+        phLicense: "Enter your Stripe Session ID or Key",
         btnValidate: "Validate",
         btnContinueFree: "Continue using free version",
         badgeAddendum: "Scope Addendum No.",
@@ -1214,7 +1243,6 @@
     };
 
     window.addEventListener('DOMContentLoaded', () => {
-      // Detección automática de idioma del navegador
       const browserLang = (navigator.language || navigator.userLanguage || 'es').substring(0, 2).toLowerCase();
       if (translations[browserLang]) {
         currentLang = browserLang;
@@ -1232,7 +1260,6 @@
         { id: 102, date: new Date().toISOString().split('T')[0], desc: dict.defaultWork2, hours: 1.5 }
       ];
 
-      // Verificación de Licencia PRO desde Stripe Return URL o LocalStorage
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get('pro') === 'true' || urlParams.get('session_id') || localStorage.getItem('scopeguard_pro_active') === 'true') {
         state.isPro = true;
@@ -1245,13 +1272,12 @@
         }
       }
 
-      // Descompresión LZ-String al cargar un documento compartido por Hash
       if (window.location.hash.startsWith('#proposal=')) {
         try {
           const rawHash = window.location.hash.replace('#proposal=', '');
           let jsonStr = LZString.decompressFromEncodedURIComponent(rawHash);
           if (!jsonStr) {
-            jsonStr = decodeURIComponent(atob(rawHash)); // Fallback a Base64
+            jsonStr = decodeURIComponent(atob(rawHash));
           }
           const decoded = JSON.parse(jsonStr);
           state = { ...state, ...decoded };
@@ -1260,7 +1286,7 @@
           document.getElementById('editor-panel').classList.add('hidden');
           document.getElementById('client-view-banner').classList.remove('hidden');
 
-          if (state.webhookUrl) triggerWebhookTracking();
+          if (state.webhookUrl && isValidHttpUrl(state.webhookUrl)) triggerWebhookTracking();
         } catch (e) {
           console.error('Error al decodificar documento compartido', e);
         }
@@ -1320,18 +1346,21 @@
       } else {
         badge.innerText = 'FREE';
         badge.className = 'text-xs bg-slate-800 text-slate-400 border border-slate-700 px-2 py-0.5 rounded-full uppercase tracking-wider select-none';
-        btnAction.innerHTML = `<i class="fa-solid fa-crown"></i> <span>${dict.btnActivatePro}</span>`;
+        btnAction.innerHTML = `<i class="fa-solid fa-crown"></i> <span>${escapeHTML(dict.btnActivatePro)}</span>`;
         btnAction.className = 'text-xs sm:text-sm bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-semibold px-3 py-2 rounded-lg shadow-md transition flex items-center gap-1.5 cursor-pointer';
         btnAction.onclick = openProModal;
         customPanel.classList.add('hidden');
       }
     }
 
+    // ACTIVACIÓN DE LICENCIA SEGURO SINTÁCTICAMENTE
     function activateProLicense() {
-      const input = document.getElementById('license-key-input').value.trim();
+      const licenseInput = document.getElementById('license-key-input');
+      if (!licenseInput) return;
+      
+      const input = licenseInput.value.trim();
       const dict = translations[currentLang] || translations.es;
       
-      // Validación segura por formato de Session ID de Stripe (ej: cs_live_...) o clave autorizada
       if (input.startsWith('cs_') || input.startsWith('CS_') || input.startsWith('PRO_') || input.length >= 12) {
         state.isPro = true;
         localStorage.setItem('scopeguard_pro_active', 'true');
@@ -1380,11 +1409,11 @@
     }
 
     function syncFormFromState() {
-      document.getElementById('clientName').value = state.clientName;
-      document.getElementById('projectName').value = state.projectName;
-      document.getElementById('currency').value = state.currency;
-      document.getElementById('hourlyRate').value = state.hourlyRate;
-      document.getElementById('urgency').value = state.urgency;
+      document.getElementById('clientName').value = state.clientName || '';
+      document.getElementById('projectName').value = state.projectName || '';
+      document.getElementById('currency').value = state.currency || 'EUR';
+      document.getElementById('hourlyRate').value = state.hourlyRate || 0;
+      document.getElementById('urgency').value = state.urgency || 0;
       document.getElementById('themeColorSelect').value = state.themeColor || 'indigo';
       document.getElementById('legalTemplateSelect').value = state.legalTemplate || 'standard';
       document.getElementById('webhookUrlInput').value = state.webhookUrl || '';
@@ -1450,7 +1479,7 @@
           const row = document.createElement('div');
           row.className = "flex items-center gap-2 bg-slate-50 p-2.5 rounded-lg border border-slate-200 text-xs";
           row.innerHTML = `
-            <input type="text" placeholder="${dict.phTaskDesc}" value="${item.desc}" oninput="updateProposalItem(${index}, 'desc', this.value)" class="flex-1 px-2.5 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-indigo-500 outline-none">
+            <input type="text" placeholder="${escapeHTML(dict.phTaskDesc)}" value="${escapeHTML(item.desc)}" oninput="updateProposalItem(${index}, 'desc', this.value)" class="flex-1 px-2.5 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-indigo-500 outline-none">
             <div class="flex items-center gap-1 w-24">
               <input type="number" min="0.5" step="0.5" value="${item.hours}" oninput="updateProposalItem(${index}, 'hours', parseFloat(this.value) || 0)" class="w-full px-2 py-1.5 border border-slate-300 rounded text-center focus:ring-1 focus:ring-indigo-500 outline-none">
               <span class="text-slate-500 text-[10px]">hrs</span>
@@ -1464,8 +1493,8 @@
           const row = document.createElement('div');
           row.className = "grid grid-cols-12 gap-2 bg-slate-50 p-2.5 rounded-lg border border-slate-200 text-xs items-center";
           row.innerHTML = `
-            <input type="date" value="${item.date}" onchange="updateTimesheetItem(${index}, 'date', this.value)" class="col-span-3 px-2 py-1.5 border border-slate-300 rounded text-[11px] outline-none">
-            <input type="text" placeholder="${dict.phWorkDone}" value="${item.desc}" oninput="updateTimesheetItem(${index}, 'desc', this.value)" class="col-span-5 px-2.5 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-indigo-500 outline-none">
+            <input type="date" value="${escapeHTML(item.date)}" onchange="updateTimesheetItem(${index}, 'date', this.value)" class="col-span-3 px-2 py-1.5 border border-slate-300 rounded text-[11px] outline-none">
+            <input type="text" placeholder="${escapeHTML(dict.phWorkDone)}" value="${escapeHTML(item.desc)}" oninput="updateTimesheetItem(${index}, 'desc', this.value)" class="col-span-5 px-2.5 py-1.5 border border-slate-300 rounded focus:ring-1 focus:ring-indigo-500 outline-none">
             <div class="col-span-3 flex items-center gap-1">
               <input type="number" min="0.25" step="0.25" value="${item.hours}" oninput="updateTimesheetItem(${index}, 'hours', parseFloat(this.value) || 0)" class="w-full px-2 py-1.5 border border-slate-300 rounded text-center focus:ring-1 focus:ring-indigo-500 outline-none">
               <span class="text-slate-500 text-[10px]">h</span>
@@ -1535,15 +1564,15 @@
 
       const logoContainer = document.getElementById('brand-logo-container');
       if (state.isPro && state.customLogo) {
-        logoContainer.innerHTML = `<img src="${state.customLogo}" alt="Logo" class="h-10 max-w-[160px] object-contain">`;
+        logoContainer.innerHTML = `<img src="${escapeHTML(state.customLogo)}" alt="Logo" class="h-10 max-w-[160px] object-contain">`;
       } else {
         logoContainer.innerHTML = `<div id="out-brand-text" class="font-black text-xl uppercase tracking-wider ${activeColorClass}">SCOPEGUARD</div>`;
       }
 
       const paymentCtaContainer = document.getElementById('out-payment-cta-container');
       const paymentBtn = document.getElementById('out-payment-button');
-      if (state.isPro && state.paymentUrl) {
-        paymentBtn.href = state.paymentUrl;
+      if (state.isPro && state.paymentUrl && isValidHttpUrl(state.paymentUrl)) {
+        paymentBtn.href = escapeHTML(state.paymentUrl);
         paymentCtaContainer.classList.remove('hidden');
       } else {
         paymentCtaContainer.classList.add('hidden');
@@ -1552,7 +1581,7 @@
       const termsList = document.getElementById('out-terms-list');
       const langLegal = legalTemplates[currentLang] || legalTemplates.es;
       const selectedTerms = (state.isPro && langLegal[state.legalTemplate]) ? langLegal[state.legalTemplate] : langLegal.standard;
-      termsList.innerHTML = selectedTerms.map(term => `<li>${term}</li>`).join('');
+      termsList.innerHTML = selectedTerms.map(term => `<li>${escapeHTML(term)}</li>`).join('');
 
       const watermarkEl = document.getElementById('out-watermark-text');
       watermarkEl.innerText = (state.isPro && state.hideWatermark) ? "" : dict.outWatermark;
@@ -1584,10 +1613,10 @@
         document.getElementById('out-signature-label').innerText = dict.labelSignatureClient;
         
         tableHeader.innerHTML = `
-          <th class="p-3">${dict.thDesc}</th>
-          <th class="p-3 text-center">${dict.thHoursEst}</th>
-          <th class="p-3 text-right">${dict.thRate}</th>
-          <th class="p-3 text-right">${dict.thSubtotal}</th>
+          <th class="p-3">${escapeHTML(dict.thDesc)}</th>
+          <th class="p-3 text-center">${escapeHTML(dict.thHoursEst)}</th>
+          <th class="p-3 text-right">${escapeHTML(dict.thRate)}</th>
+          <th class="p-3 text-right">${escapeHTML(dict.thSubtotal)}</th>
         `;
 
         state.proposalItems.forEach(item => {
@@ -1598,10 +1627,10 @@
 
           const tr = document.createElement('tr');
           tr.innerHTML = `
-            <td class="p-3 font-medium text-slate-800">${item.desc || dict.defaultTaskTitle}</td>
+            <td class="p-3 font-medium text-slate-800">${escapeHTML(item.desc || dict.defaultTaskTitle)}</td>
             <td class="p-3 text-center">${itemHours} h</td>
-            <td class="p-3 text-right">${state.hourlyRate.toFixed(2)} ${symbol}</td>
-            <td class="p-3 text-right font-semibold">${itemSubtotal.toFixed(2)} ${symbol}</td>
+            <td class="p-3 text-right">${state.hourlyRate.toFixed(2)} ${escapeHTML(symbol)}</td>
+            <td class="p-3 text-right font-semibold">${itemSubtotal.toFixed(2)} ${escapeHTML(symbol)}</td>
           `;
           tableBody.appendChild(tr);
         });
@@ -1617,10 +1646,10 @@
         document.getElementById('out-signature-label').innerText = dict.labelSignatureTimesheet;
 
         tableHeader.innerHTML = `
-          <th class="p-3">${dict.thDate}</th>
-          <th class="p-3">${dict.thWork}</th>
-          <th class="p-3 text-center">${dict.thRealHours}</th>
-          <th class="p-3 text-right">${dict.thSubtotal}</th>
+          <th class="p-3">${escapeHTML(dict.thDate)}</th>
+          <th class="p-3">${escapeHTML(dict.thWork)}</th>
+          <th class="p-3 text-center">${escapeHTML(dict.thRealHours)}</th>
+          <th class="p-3 text-right">${escapeHTML(dict.thSubtotal)}</th>
         `;
 
         state.timesheetItems.forEach(item => {
@@ -1631,10 +1660,10 @@
 
           const tr = document.createElement('tr');
           tr.innerHTML = `
-            <td class="p-3 text-slate-500 font-mono text-[11px]">${item.date || '---'}</td>
-            <td class="p-3 font-medium text-slate-800">${item.desc || dict.defaultWorkTitle}</td>
+            <td class="p-3 text-slate-500 font-mono text-[11px]">${escapeHTML(item.date || '---')}</td>
+            <td class="p-3 font-medium text-slate-800">${escapeHTML(item.desc || dict.defaultWorkTitle)}</td>
             <td class="p-3 text-center font-semibold">${itemHours} h</td>
-            <td class="p-3 text-right font-semibold">${itemSubtotal.toFixed(2)} ${symbol}</td>
+            <td class="p-3 text-right font-semibold">${itemSubtotal.toFixed(2)} ${escapeHTML(symbol)}</td>
           `;
           tableBody.appendChild(tr);
         });
@@ -1666,14 +1695,12 @@
       document.getElementById('out-hash').innerText = `HASH: SG-${Math.abs(hash).toString(16).toUpperCase().substring(0, 8)}`;
     }
 
-    // Generador de Enlaces con Acortador Automático para WhatsApp
     async function generateShareableLink() {
       const jsonStr = JSON.stringify(state);
       const compressed = LZString.compressToEncodedURIComponent(jsonStr);
       const longUrl = `${window.location.origin}${window.location.pathname}#proposal=${compressed}`;
       const dict = translations[currentLang] || translations.es;
 
-      // Intentar acortar la URL automáticamente con la API pública de TinyURL
       try {
         const response = await fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(longUrl)}`);
         if (response.ok) {
@@ -1686,7 +1713,6 @@
         console.log('No se pudo acortar automáticamente, utilizando enlace directo comprimido.', e);
       }
 
-      // Si no hay conexión o falla el servicio, se copia el enlace directo
       navigator.clipboard.writeText(longUrl).then(() => {
         alert(dict.alertLinkCopied);
       });
@@ -1780,6 +1806,7 @@
 
     function triggerWebhookTracking() {
       try {
+        if (!isValidHttpUrl(state.webhookUrl)) return;
         fetch(state.webhookUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -1790,12 +1817,13 @@
             mode: state.mode,
             timestamp: new Date().toISOString()
           })
-        }).catch(err => console.log('Webhook ping sent'));
+        }).catch(err => console.log('Webhook ping enviado'));
       } catch (e) {}
     }
 
     let sigCanvas, sigCtx, isDrawing = false;
 
+    // FIRMA TÁCTIL CORREGIDA
     function initSignatureCanvas() {
       sigCanvas = document.getElementById('signature-canvas');
       sigCtx = sigCanvas.getContext('2d');
@@ -1810,6 +1838,7 @@
       }
 
       function startDraw(e) {
+        if (e.type.startsWith('touch')) e.preventDefault();
         isDrawing = true;
         const pos = getPos(e);
         sigCtx.beginPath();
@@ -1818,6 +1847,7 @@
 
       function draw(e) {
         if (!isDrawing) return;
+        if (e.type.startsWith('touch')) e.preventDefault();
         const pos = getPos(e);
         sigCtx.lineTo(pos.x, pos.y);
         sigCtx.stroke();
@@ -1829,8 +1859,8 @@
       sigCanvas.addEventListener('mousemove', draw);
       sigCanvas.addEventListener('mouseup', stopDraw);
 
-      sigCanvas.addEventListener('touchstart', startDraw);
-      sigCanvas.addEventListener('touchmove', draw);
+      sigCanvas.addEventListener('touchstart', startDraw, { passive: false });
+      sigCanvas.addEventListener('touchmove', draw, { passive: false });
       sigCanvas.addEventListener('touchend', stopDraw);
     }
 
@@ -1853,6 +1883,7 @@
       closeSignatureModal();
     }
 
+    // EXPORTACIÓN CSV CORREGIDA CON BLOB UTF-8
     function exportHistoryToCSV() {
       const dict = translations[currentLang] || translations.es;
       if (!state.isPro) {
@@ -1866,26 +1897,32 @@
         return;
       }
 
-      let csvContent = "data:text/csv;charset=utf-8,ID,Fecha,Modo,Cliente,Proyecto,Total,Moneda\n";
+      let csvContent = "ID,Fecha,Modo,Cliente,Proyecto,Total,Moneda\n";
 
       history.forEach(row => {
         const isProp = row.mode === 'proposal';
-        const itemsArr = isProp ? row.data.proposalItems : row.data.timesheetItems;
-        const totalHours = itemsArr.reduce((a, b) => a + b.hours, 0);
-        const total = totalHours * row.data.hourlyRate * (isProp ? (1 + row.data.urgency / 100) : 1);
+        const itemsArr = isProp ? (row.data.proposalItems || []) : (row.data.timesheetItems || []);
+        const totalHours = itemsArr.reduce((a, b) => a + (parseFloat(b.hours) || 0), 0);
+        const total = totalHours * (parseFloat(row.data.hourlyRate) || 0) * (isProp ? (1 + (parseFloat(row.data.urgency) || 0) / 100) : 1);
 
-        csvContent += `"${row.id}","${row.date}","${row.mode}","${row.data.clientName}","${row.data.projectName}","${total.toFixed(2)}","${row.data.currency}"\n`;
+        const client = `"${(row.data.clientName || '').replace(/"/g, '""')}"`;
+        const project = `"${(row.data.projectName || '').replace(/"/g, '""')}"`;
+
+        csvContent += `"${row.id}","${row.date}","${row.mode}",${client},${project},"${total.toFixed(2)}","${row.data.currency}"\n`;
       });
 
-      const encodedUri = encodeURI(csvContent);
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
-      link.setAttribute("href", encodedUri);
+      link.setAttribute("href", url);
       link.setAttribute("download", `scopeguard_export_${new Date().toISOString().slice(0,10)}.csv`);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      URL.revokeObjectURL(url);
     }
 
+    // EXPORTACIÓN JSON CORREGIDA CON BLOB UTF-8
     function exportFullBackupJSON() {
       if (!state.isPro) {
         openProModal();
@@ -1898,13 +1935,15 @@
         history: history,
         currentState: state
       };
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
+      const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
       const dlAnchor = document.createElement('a');
-      dlAnchor.setAttribute("href", dataStr);
+      dlAnchor.setAttribute("href", url);
       dlAnchor.setAttribute("download", `scopeguard_backup_${new Date().toISOString().slice(0,10)}.json`);
       document.body.appendChild(dlAnchor);
       dlAnchor.click();
       dlAnchor.remove();
+      URL.revokeObjectURL(url);
     }
 
     function importFullBackupJSON(e) {
@@ -1989,7 +2028,7 @@
       const dict = translations[currentLang] || translations.es;
       
       if (history.length === 0) {
-        list.innerHTML = `<p class="text-center text-xs text-slate-400 py-6">${dict.historyEmpty}</p>`;
+        list.innerHTML = `<p class="text-center text-xs text-slate-400 py-6">${escapeHTML(dict.historyEmpty)}</p>`;
         return;
       }
 
@@ -1997,9 +2036,9 @@
       history.forEach(item => {
         const symbol = currencySymbols[item.data.currency] || '$';
         const isProp = item.mode === 'proposal';
-        const itemsArr = isProp ? item.data.proposalItems : item.data.timesheetItems;
-        const totalHours = itemsArr.reduce((a, b) => a + b.hours, 0);
-        const total = totalHours * item.data.hourlyRate * (isProp ? (1 + item.data.urgency / 100) : 1);
+        const itemsArr = isProp ? (item.data.proposalItems || []) : (item.data.timesheetItems || []);
+        const totalHours = itemsArr.reduce((a, b) => a + (parseFloat(b.hours) || 0), 0);
+        const total = totalHours * (parseFloat(item.data.hourlyRate) || 0) * (isProp ? (1 + (parseFloat(item.data.urgency) || 0) / 100) : 1);
 
         const div = document.createElement('div');
         div.className = "flex justify-between items-center bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs hover:border-indigo-300 transition";
@@ -2007,12 +2046,12 @@
           <div>
             <div class="flex items-center gap-1.5">
               <span class="text-[9px] px-1.5 py-0.5 rounded font-bold uppercase ${isProp ? 'bg-amber-100 text-amber-800' : 'bg-indigo-100 text-indigo-800'}">${isProp ? 'Presupuesto' : 'Parte Horas'}</span>
-              <p class="font-bold text-slate-800">${item.data.clientName}</p>
+              <p class="font-bold text-slate-800">${escapeHTML(item.data.clientName)}</p>
             </div>
-            <p class="text-[10px] text-slate-400 mt-0.5">${item.date} • ${item.data.projectName} • ${total.toFixed(2)} ${symbol}</p>
+            <p class="text-[10px] text-slate-400 mt-0.5">${escapeHTML(item.date)} • ${escapeHTML(item.data.projectName)} • ${total.toFixed(2)} ${escapeHTML(symbol)}</p>
           </div>
           <div class="flex gap-2">
-            <button onclick="loadProposal(${item.id})" class="px-2.5 py-1 bg-indigo-600 text-white rounded text-[11px] hover:bg-indigo-700">${dict.btnLoad}</button>
+            <button onclick="loadProposal(${item.id})" class="px-2.5 py-1 bg-indigo-600 text-white rounded text-[11px] hover:bg-indigo-700">${escapeHTML(dict.btnLoad)}</button>
             <button onclick="deleteHistoryItem(${item.id})" class="px-2 py-1 bg-rose-100 text-rose-600 rounded text-[11px] hover:bg-rose-200"><i class="fa-solid fa-trash"></i></button>
           </div>
         `;
