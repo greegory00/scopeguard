@@ -361,7 +361,13 @@
           <div>
             <p id="out-watermark-text">Documento generado vía ScopeGuard</p>
             <p class="font-mono mt-0.5" id="out-hash">HASH: ---</p>
-            <button onclick="openLegalModal()" class="no-print underline text-slate-400 hover:text-slate-600 mt-1 block" data-i18n="legalTermsLink">Términos y Privacidad</button>
+            <div class="no-print flex items-center gap-2 mt-1 text-[11px]">
+              <button onclick="openLegalModal()" class="underline text-slate-400 hover:text-slate-600" data-i18n="legalTermsLink">Términos y Privacidad</button>
+              <span class="text-slate-300">•</span>
+              <a href="mailto:gregorymunsmi@gmail.com" class="underline text-slate-400 hover:text-slate-600 flex items-center gap-1">
+                <i class="fa-solid fa-envelope text-[10px]"></i> <span data-i18n="contactSupport">Soporte</span>
+              </a>
+            </div>
           </div>
           
           <div class="text-right flex flex-col items-end">
@@ -436,6 +442,14 @@
         <div>
           <h4 class="font-bold text-slate-800 mb-1" data-i18n="titleLegal3">3. Conexión Segura (HTTPS)</h4>
           <p data-i18n="descLegal3">Toda la navegación y generación de enlaces cifrados en URL se ejecuta bajo protocolo HTTPS seguro con certificados SSL activos.</p>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-slate-800 mb-1" data-i18n="titleLegal4">4. Contacto y Soporte</h4>
+          <p data-i18n="descLegal4">Para cualquier consulta sobre licencias, facturación o soporte técnico, puedes contactar con nosotros directamente en:</p>
+          <a href="mailto:gregorymunsmi@gmail.com" class="text-indigo-600 font-semibold hover:underline flex items-center gap-1 mt-1">
+            <i class="fa-solid fa-envelope"></i> gregorymunsmi@gmail.com
+          </a>
         </div>
       </div>
 
@@ -588,6 +602,7 @@
         outTermsHeader: "Condiciones de Ejecución:",
         btnSign: "Firmar en pantalla",
         legalTermsLink: "Términos y Privacidad",
+        contactSupport: "Soporte y Contacto",
         modalFeedbackTitle: "Sugerencias y Opinión",
         modalFeedbackText: "ScopeGuard se encuentra en fase Beta. Ayúdanos a mejorar contándonos qué otra función te gustaría ver o si has encontrado algún fallo:",
         labelFeedbackMsg: "Tu Mensaje o Sugerencia",
@@ -603,6 +618,8 @@
         descLegal2: "ScopeGuard actúa únicamente como un generador de documentos y no forma parte de ninguna relación mercantil, disputa de servicios o impago que pueda surgir entre el profesional y su cliente.",
         titleLegal3: "3. Conexión Segura (HTTPS)",
         descLegal3: "Toda la navegación y generación de enlaces cifrados en URL se ejecuta bajo protocolo HTTPS seguro con certificados SSL activos.",
+        titleLegal4: "4. Contacto y Soporte",
+        descLegal4: "Para cualquier consulta sobre licencias, facturación o soporte técnico, puedes contactar con nosotros directamente en:",
         btnUnderstood: "Entendido",
         modalSignTitle: "Firma Digital del Cliente",
         descSignature: "Dibuja tu firma con el ratón o pantalla táctil en el recuadro inferior:",
@@ -725,6 +742,7 @@
         outTermsHeader: "Execution Terms:",
         btnSign: "Sign on Screen",
         legalTermsLink: "Terms & Privacy",
+        contactSupport: "Support & Contact",
         modalFeedbackTitle: "Feedback & Suggestions",
         modalFeedbackText: "ScopeGuard is in Beta. Help us improve by letting us know what features you'd like to see or any bugs you've found:",
         labelFeedbackMsg: "Your Message or Suggestion",
@@ -740,6 +758,8 @@
         descLegal2: "ScopeGuard acts purely as a document generator and is not party to commercial disputes between freelancers and clients.",
         titleLegal3: "3. Secure Connection (HTTPS)",
         descLegal3: "All navigation and encoded URL links run under secure HTTPS protocol with active SSL certificates.",
+        titleLegal4: "4. Contact & Support",
+        descLegal4: "For any questions regarding licensing, billing, or technical support, contact us directly at:",
         btnUnderstood: "Understood",
         modalSignTitle: "Client Digital Signature",
         descSignature: "Draw your signature using your mouse or touchscreen below:",
@@ -811,7 +831,7 @@
       fr: {
         tagline: "Devis de Modifications & Relevé d'Heures",
         heroBadge: "Gestion du Périmètre Professionnelle",
-        heroTitle: "Évitez el trabajo no remunerado en tus proyectos",
+        heroTitle: "Évitez le travail non rémunéré en tus proyectos",
         heroSub: "Générez des devis d'avenant en quelques secondes avant de valider des changements, ou créez des relevés d'heures professionnels.",
         btnStartEditor: "Créer Document",
         btnSeeProFeatures: "Voir Plan PRO",
@@ -862,6 +882,7 @@
         outTermsHeader: "Conditions d'Exécution :",
         btnSign: "Signer sur l'écran",
         legalTermsLink: "Mentions Légales & Confidentialité",
+        contactSupport: "Support et Contact",
         modalFeedbackTitle: "Avis & Suggestions",
         modalFeedbackText: "ScopeGuard est en phase Bêta. Aidez-nous à l'améliorer en nous faisant part de vos remarques :",
         labelFeedbackMsg: "Votre Message ou Suggestion",
@@ -877,6 +898,8 @@
         descLegal2: "ScopeGuard agit uniquement en tant que générateur de documents.",
         titleLegal3: "3. Connexion Sécurisée (HTTPS)",
         descLegal3: "Toutes les connexions s'effectuent sous protocole HTTPS sécurisé.",
+        titleLegal4: "4. Contact et Support",
+        descLegal4: "Pour toute question concernant les licences, la facturation ou le support technique, contactez-nous directement à:",
         btnUnderstood: "Compris",
         modalSignTitle: "Signature Numérique du Client",
         descSignature: "Dessinez votre signature avec la souris ou l'écran tactile ci-dessous :",
@@ -999,6 +1022,7 @@
         outTermsHeader: "Ausführungsbedingungen:",
         btnSign: "Auf dem Bildschirm unterschreiben",
         legalTermsLink: "Impressum & Datenschutz",
+        contactSupport: "Support & Kontakt",
         modalFeedbackTitle: "Feedback & Vorschläge",
         modalFeedbackText: "ScopeGuard befindet sich in der Beta-Phase. Helfen Sie uns, die App zu verbessern:",
         labelFeedbackMsg: "Ihre Nachricht oder Ihr Vorschlag",
@@ -1014,6 +1038,8 @@
         descLegal2: "ScopeGuard fungiert rein als Dokumentengenerator.",
         titleLegal3: "3. Sichere Verbindung (HTTPS)",
         descLegal3: "Alle Verbindungen laufen über das sichere HTTPS-Protokoll.",
+        titleLegal4: "4. Kontakt & Support",
+        descLegal4: "Bei Fragen zu Lizenzen, Abrechnung oder technischem Support wenden Sie sich bitte direkt an uns unter:",
         btnUnderstood: "Verstanden",
         modalSignTitle: "Digitale Kundenunterschrift",
         descSignature: "Zeichnen Sie Ihre Unterschrift unten mit der Maus oder dem Touchscreen:",
@@ -1643,31 +1669,31 @@
       document.getElementById('out-hash').innerText = `HASH: SG-${Math.abs(hash).toString(16).toUpperCase().substring(0, 8)}`;
     }
 
-// Generador de Enlaces con Acortador Automático para WhatsApp
-async function generateShareableLink() {
-  const jsonStr = JSON.stringify(state);
-  const compressed = LZString.compressToEncodedURIComponent(jsonStr);
-  const longUrl = `${window.location.origin}${window.location.pathname}#proposal=${compressed}`;
-  const dict = translations[currentLang] || translations.es;
+    // Generador de Enlaces con Acortador Automático para WhatsApp
+    async function generateShareableLink() {
+      const jsonStr = JSON.stringify(state);
+      const compressed = LZString.compressToEncodedURIComponent(jsonStr);
+      const longUrl = `${window.location.origin}${window.location.pathname}#proposal=${compressed}`;
+      const dict = translations[currentLang] || translations.es;
 
-  // Intentar acortar la URL automáticamente con la API pública de TinyURL
-  try {
-    const response = await fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(longUrl)}`);
-    if (response.ok) {
-      const shortUrl = await response.text();
-      await navigator.clipboard.writeText(shortUrl);
-      alert(`¡Enlace corto generado y copiado al portapapeles!\n\n${shortUrl}`);
-      return;
+      // Intentar acortar la URL automáticamente con la API pública de TinyURL
+      try {
+        const response = await fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(longUrl)}`);
+        if (response.ok) {
+          const shortUrl = await response.text();
+          await navigator.clipboard.writeText(shortUrl);
+          alert(`¡Enlace corto generado y copiado al portapapeles!\n\n${shortUrl}`);
+          return;
+        }
+      } catch (e) {
+        console.log('No se pudo acortar automáticamente, utilizando enlace directo comprimido.', e);
+      }
+
+      // Si no hay conexión o falla el servicio, se copia el enlace directo
+      navigator.clipboard.writeText(longUrl).then(() => {
+        alert(dict.alertLinkCopied);
+      });
     }
-  } catch (e) {
-    console.log('No se pudo acortar automáticamente, utilizando enlace directo comprimido.', e);
-  }
-
-  // Si no hay conexión o falla el servicio, se copia el enlace directo
-  navigator.clipboard.writeText(longUrl).then(() => {
-    alert(dict.alertLinkCopied);
-  });
-}
 
     function copyDiplomaticWhatsAppMessage() {
       if (!state.isPro) {
