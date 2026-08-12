@@ -510,29 +510,36 @@
     </div>
   </div>
 
-  <!-- MODAL ACTIVACIÓN PRO (STRIPE) -->
-  <div id="pro-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-amber-200 space-y-5 text-center relative overflow-hidden">
-      <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mx-auto text-2xl font-bold">
-        <i class="fa-solid fa-crown"></i>
-      </div>
-      <div>
-        <h3 class="font-black text-xl text-slate-900" data-i18n="modalProTitle">Activar ScopeGuard PRO</h3>
-        <p class="text-xs text-slate-500 mt-1" data-i18n="modalProSub">Marca blanca completa, mensajes para WhatsApp, enlaces de cobro y firma digital.</p>
-      </div>
-      <ul class="text-left text-xs space-y-2.5 text-slate-700 bg-amber-50/60 p-4 rounded-xl border border-amber-100">
-        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-600"></i> <span data-i18n="proFeature1">Redactor de mensajes diplomáticos para WhatsApp.</span></li>
-        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-600"></i> <span data-i18n="proFeature2">Botón de cobro de anticipo directo (Stripe, PayPal).</span></li>
-        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-600"></i> <span data-i18n="proFeature3">Logo y colores corporativos personalizados.</span></li>
-        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-600"></i> <span data-i18n="proFeature4">Tareas ilimitadas por presupuesto (vs. 3 en Free).</span></li>
-        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-600"></i> <span data-i18n="proFeature5">Firma digital táctil del cliente en pantalla.</span></li>
-      </ul>
+<!-- MODAL ACTIVACIÓN PRO (STRIPE) -->
+<div id="pro-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print">
+  <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-amber-200 space-y-5 text-center relative overflow-hidden">
+    <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mx-auto text-2xl font-bold">
+      <i class="fa-solid fa-crown"></i>
+    </div>
+    <div>
+      <h3 class="font-black text-xl text-slate-900" data-i18n="modalProTitle">Activar ScopeGuard PRO</h3>
+      <p class="text-xs text-slate-500 mt-1" data-i18n="modalProSub">Marca blanca completa, mensajes para WhatsApp, enlaces de cobro y firma digital.</p>
+    </div>
+    <ul class="text-left text-xs space-y-2.5 text-slate-700 bg-amber-50/60 p-4 rounded-xl border border-amber-100">
+      <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-600"></i> <span data-i18n="proFeature1">Redactor de mensajes diplomáticos para WhatsApp.</span></li>
+      <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-600"></i> <span data-i18n="proFeature2">Botón de cobro de anticipo directo (Stripe, PayPal).</span></li>
+      <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-600"></i> <span data-i18n="proFeature3">Logo y colores corporativos personalizados.</span></li>
+      <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-600"></i> <span data-i18n="proFeature4">Tareas ilimitadas por presupuesto (vs. 3 en Free).</span></li>
+      <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-600"></i> <span data-i18n="proFeature5">Firma digital táctil del cliente en pantalla.</span></li>
+    </ul>
 
-      <div class="space-y-3 pt-2 border-t border-slate-100">
-        <a href="https://buy.stripe.com/3cIcN47iHgZ95PT5Do9IQ00" target="_blank" rel="noopener noreferrer" class="block w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-bold text-sm rounded-xl shadow-lg transition text-center" data-i18n="btnBuyPro">
-          Comprar Licencia PRO ($19 USD)
-        </a>
-      </div>
+    <div class="space-y-3 pt-2 border-t border-slate-100">
+      <a href="https://buy.stripe.com/3cIcN47iHgZ95PT5Do9IQ00" target="_blank" rel="noopener noreferrer" class="block w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-bold text-sm rounded-xl shadow-lg transition text-center" data-i18n="btnBuyPro">
+        Comprar Licencia PRO ($19 USD)
+      </a>
+    </div>
+
+    <div class="space-y-1 pt-2">
+      <button onclick="closeProModal()" class="text-xs text-slate-400 hover:text-slate-600 underline block mx-auto" data-i18n="btnContinueFree">Seguir usando la versión gratuita</button>
+      <p class="text-[10px] text-slate-400 pt-1">¿Dudas con tu compra? Contacta a <a href="mailto:gregorymunsmi@gmail.com" class="underline hover:text-slate-600">gregorymunsmi@gmail.com</a></p>
+    </div>
+  </div>
+</div>
 
       <!-- INTERFAZ FALTANTE PARA ACTIVACIÓN DE CLAVE / SESSION ID -->
       <div class="pt-2 border-t border-slate-100 space-y-2 text-left">
