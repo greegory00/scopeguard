@@ -1249,18 +1249,36 @@
         { id: 102, date: new Date().toISOString().split('T')[0], desc: dict.defaultWork2, hours: 1.5 }
       ];
 
-      // VERIFICACIÓN SEGURA DE LICENCIA PRO DESDE STRIPE O LOCALSTORAGE
-      const urlParams = new URLSearchParams(window.location.search);
-      const sessionId = urlParams.get('session_id');
+// ACTIVACIÓN PRO SEGURA MEDIANTE CLOUDFLARE WORKER
+    const urlParams = new URLSearchParams(window.location.search);
+    const sessionId = urlParams.get('session_id');
 
-      if ((sessionId && sessionId.toLowerCase().startsWith('cs_')) || localStorage.getItem('scopeguard_pro_active') === 'true') {
-        state.isPro = true;
-        localStorage.setItem('scopeguard_pro_active', 'true');
-        if (sessionId) {
-          localStorage.setItem('scopeguard_stripe_session', sessionId);
+    // Si ya estaba activado en localStorage en este navegador
+    if (localStorage.getItem('scopeguard_pro_active') === 'true') {
+      state.isPro = true;
+    }
+
+    // Si llega un comprador redirigido desde Stripe con session_id
+    if (sessionId) {
+      fetch(`https://scopeguard-verify.gregorymunsmi.workers.dev?session_id=${encodeURIComponent(sessionId)}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.valid) {
+            state.isPro = true;
+            localStorage.setItem('scopeguard_pro_active', 'true');
+            applyProUIState();
+            updateProposal();
+            alert(translations[currentLang]?.alertLicenseActivated || "¡Licencia PRO activada con éxito!");
+          } else {
+            alert(translations[currentLang]?.alertLicenseInvalid || "ID de sesión no válido o pago no completado.");
+          }
+          // Limpia la barra de direcciones para quitar el session_id
           window.history.replaceState({}, document.title, window.location.pathname);
-        }
-      }
+        })
+        .catch(err => {
+          console.error("Error al verificar la sesión con Cloudflare Worker:", err);
+        });
+    }
 
       if (window.location.hash.startsWith('#proposal=')) {
         try {
