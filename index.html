@@ -23,11 +23,23 @@
   <style>
     body { font-family: 'Inter', sans-serif; }
     @media print {
+      @page { size: A4 portrait; margin: 10mm; }
       .no-print { display: none !important; }
       .print-only { display: block !important; }
-      body { background: white; color: black; }
-      .print-card { border: 1px solid #e2e8f0; box-shadow: none !important; break-inside: avoid; }
-      tr, .print-card > div { break-inside: avoid; }
+      body { background: white !important; color: black !important; padding: 0 !important; margin: 0 !important; }
+      .print-card { 
+        border: none !important; 
+        box-shadow: none !important; 
+        padding: 0 !important; 
+        width: 100% !important; 
+        max-width: 100% !important; 
+      }
+      tr, .print-card > div, #signature-placeholder, #out-terms-box, #out-payment-cta-container { 
+        break-inside: avoid !important; 
+        page-break-inside: avoid !important; 
+      }
+      table { width: 100% !important; page-break-inside: auto; }
+      thead { display: table-header-group; }
     }
     canvas { touch-action: none; }
   </style>
@@ -163,6 +175,26 @@
               <option value="25" data-i18n="urgency25">Urgente (+25%)</option>
               <option value="50" data-i18n="urgency50">Crítico / Fin de Semana (+50%)</option>
             </select>
+          </div>
+        </div>
+
+        <!-- SECCIÓN DESGROSE DE IMPUESTOS (NUEVO) -->
+        <div class="border-t border-slate-100 pt-3">
+          <div class="flex items-center justify-between mb-2">
+            <label class="flex items-center gap-2 cursor-pointer text-xs font-semibold text-slate-700">
+              <input type="checkbox" id="taxToggle" onchange="toggleTaxSettings(this.checked)" class="rounded text-indigo-600 focus:ring-indigo-500">
+              <span data-i18n="labelTaxToggle">Desglosar Impuestos (IVA / IRPF)</span>
+            </label>
+          </div>
+          <div id="tax-inputs-container" class="hidden grid grid-cols-2 gap-3 pt-1 text-xs">
+            <div>
+              <label class="block text-slate-600 mb-1" data-i18n="labelIvaRate">IVA (%)</label>
+              <input type="number" id="taxRate" value="21" min="0" max="100" oninput="updateProposal()" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg outline-none">
+            </div>
+            <div>
+              <label class="block text-slate-600 mb-1" data-i18n="labelIrpfRate">Retención IRPF (%)</label>
+              <input type="number" id="irpfRate" value="0" min="0" max="100" oninput="updateProposal()" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg outline-none">
+            </div>
           </div>
         </div>
 
@@ -331,6 +363,23 @@
                 <span data-i18n="outUrgencyLabel">Recargo Urgencia:</span>
                 <span id="out-urgency" class="font-semibold">+0.00 €</span>
               </div>
+
+              <!-- DESGLOSE DE TAX PREVIEW (NUEVO) -->
+              <div id="out-tax-rows" class="hidden space-y-1 border-t border-slate-100 pt-1 text-[11px] text-slate-600">
+                <div class="flex justify-between">
+                  <span data-i18n="outBaseImponible">Base Imponible:</span>
+                  <span id="out-base" class="font-semibold">0.00 €</span>
+                </div>
+                <div id="out-iva-row" class="flex justify-between">
+                  <span><span data-i18n="outIva">IVA</span> (<span id="out-tax-rate">21</span>%):</span>
+                  <span id="out-tax-val" class="font-semibold">+0.00 €</span>
+                </div>
+                <div id="out-irpf-row" class="flex justify-between text-rose-700 hidden">
+                  <span><span data-i18n="outIrpf">Retención IRPF</span> (<span id="out-irpf-rate">0</span>%):</span>
+                  <span id="out-irpf-val" class="font-semibold">-0.00 €</span>
+                </div>
+              </div>
+
               <div class="flex justify-between text-slate-900 font-black text-base border-t border-slate-200 pt-2">
                 <span id="label-total">Costo Total Adicional:</span>
                 <span id="out-total" class="text-indigo-600">0.00 €</span>
@@ -435,8 +484,8 @@
         </div>
 
         <div>
-          <h4 class="font-bold text-slate-800 mb-1" data-i18n="titleLegal2">2. Relación Contractual Neutra</h4>
-          <p data-i18n="descLegal2">ScopeGuard actúa únicamente como un generador de documentos y no forma parte de ninguna relación mercantil, disputa de servicios o impago que pueda surgir entre el profesional y su cliente.</p>
+          <h4 class="font-bold text-slate-800 mb-1" data-i18n="titleLegal2">2. Validez de Acuerdos Electrónicos</h4>
+          <p data-i18n="descLegal2">La firma digital en pantalla y la aceptación explícita expresada a través de medios digitales constituyen manifestaciones de voluntad vinculantes según los estándares aplicables de contratación electrónica entre particulares y profesionales.</p>
         </div>
 
         <div>
@@ -491,7 +540,18 @@
         <h3 class="font-bold text-slate-900 text-lg flex items-center gap-2"><i class="fa-solid fa-folder"></i> <span data-i18n="modalHistoryTitle">Documentos Guardados</span></h3>
         <button onclick="toggleHistoryModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
       </div>
+
+      <!-- BANNER INFORMATIVO LOCAL-FIRST (NUEVO) -->
+      <div class="bg-amber-50 border border-amber-200/80 rounded-xl p-3 text-xs text-amber-900 flex items-start gap-2.5">
+        <i class="fa-solid fa-shield-halved text-amber-600 mt-0.5 text-sm"></i>
+        <div>
+          <p class="font-bold" data-i18n="titleLocalFirstNotice">Almacenamiento 100% Privado y Local</p>
+          <p class="text-[11px] text-amber-800 mt-0.5" data-i18n="descLocalFirstNotice">Tus datos se guardan exclusivamente en el navegador. Exporta una copia de seguridad (JSON) periódicamente para evitar pérdidas si limpias la memoria caché.</p>
+        </div>
+      </div>
+
       <div id="history-list" class="flex-1 overflow-y-auto space-y-2"></div>
+      
       <div class="border-t pt-3 flex flex-wrap justify-between items-center gap-2">
         <div class="flex gap-2">
           <button id="btn-export-csv" onclick="exportHistoryToCSV()" class="px-3 py-1.5 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 text-xs font-semibold rounded-lg flex items-center gap-1">
@@ -587,6 +647,12 @@
         urgency0: "Sin recargo (0%)",
         urgency25: "Urgente (+25%)",
         urgency50: "Crítico / Fin de Semana (+50%)",
+        labelTaxToggle: "Desglosar Impuestos (IVA / IRPF)",
+        labelIvaRate: "IVA (%)",
+        labelIrpfRate: "Retención IRPF (%)",
+        outBaseImponible: "Base Imponible:",
+        outIva: "IVA",
+        outIrpf: "Retención IRPF",
         titleProPanel: "Funciones de Marca Blanca & Cobro (PRO)",
         btnActivatePro: "Activar PRO",
         labelLogo: "Logo Corporativo",
@@ -629,8 +695,8 @@
         descLocalFirst: "ScopeGuard opera 100% en el cliente. Ningún dato de tus clientes, proyectos o presupuestos se envía ni almacena en servidores externos. Todo el historial se conserva en la memoria local de tu dispositivo (localStorage).",
         titleLegal1: "1. Exención de Responsabilidad en Cálculos",
         descLegal1: "Los cálculos de costos, recargos y estimaciones de plazos ofrecidos por esta herramienta son orientativos y automatizados en función de los datos introducidos por el propio usuario. ScopeGuard no garantiza ni se responsabiliza de la exactitud ni del cumplimiento comercial de los acuerdos privados entre el usuario y sus clientes finales.",
-        titleLegal2: "2. Relación Contractual Neutra",
-        descLegal2: "ScopeGuard actúa únicamente como un generador de documentos y no forma parte de ninguna relación mercantil, disputa de servicios o impago que pueda surgir entre el profesional y su cliente.",
+        titleLegal2: "2. Validez de Acuerdos Electrónicos",
+        descLegal2: "La firma digital en pantalla y la aceptación explícita expresada a través de medios digitales constituyen manifestaciones de voluntad vinculantes según los estándares aplicables de contratación electrónica entre particulares y profesionales.",
         titleLegal3: "3. Conexión Segura (HTTPS)",
         descLegal3: "Toda la navegación y generación de enlaces cifrados en URL se ejecuta bajo protocolo HTTPS seguro con certificados SSL activos.",
         titleLegal4: "4. Contacto y Soporte",
@@ -641,6 +707,8 @@
         btnClear: "Limpiar",
         btnSaveSignature: "Guardar Firma",
         modalHistoryTitle: "Documentos Guardados",
+        titleLocalFirstNotice: "Almacenamiento 100% Privado y Local",
+        descLocalFirstNotice: "Tus datos se guardan exclusivamente en el navegador. Exporta una copia de seguridad (JSON) periódicamente para evitar pérdidas si limpias la memoria caché.",
         btnExportCSV: "Exportar (CSV)",
         btnExportJSON: "Backup (JSON)",
         btnImportJSON: "Importar",
@@ -727,6 +795,12 @@
         urgency0: "Standard (0%)",
         urgency25: "Rush (+25%)",
         urgency50: "Critical / Weekend (+50%)",
+        labelTaxToggle: "Enable Taxes (VAT / Tax Withholding)",
+        labelIvaRate: "VAT / Sales Tax (%)",
+        labelIrpfRate: "Income Tax Withholding (%)",
+        outBaseImponible: "Tax Base:",
+        outIva: "VAT",
+        outIrpf: "Tax Withholding",
         titleProPanel: "White-Label & Payment Links (PRO)",
         btnActivatePro: "Activate PRO",
         labelLogo: "Corporate Logo",
@@ -769,8 +843,8 @@
         descLocalFirst: "ScopeGuard operates 100% client-side. No customer, project, or quote data is sent or stored on external servers. All history remains in your device's local storage (localStorage).",
         titleLegal1: "1. Disclaimer on Calculations",
         descLegal1: "Cost calculations, surcharges, and timeline estimates are guidelines based on user input. ScopeGuard does not guarantee accuracy or legal compliance of private agreements.",
-        titleLegal2: "2. Neutral Contractual Relationship",
-        descLegal2: "ScopeGuard acts purely as a document generator and is not party to commercial disputes between freelancers and clients.",
+        titleLegal2: "2. Validity of Digital Agreements",
+        descLegal2: "On-screen signatures and explicit electronic acceptances constitute legally binding declarations of intent under applicable digital commerce standards.",
         titleLegal3: "3. Secure Connection (HTTPS)",
         descLegal3: "All navigation and encoded URL links run under secure HTTPS protocol with active SSL certificates.",
         titleLegal4: "4. Contact & Support",
@@ -781,6 +855,8 @@
         btnClear: "Clear",
         btnSaveSignature: "Save Signature",
         modalHistoryTitle: "Saved Documents",
+        titleLocalFirstNotice: "100% Private & Local Storage",
+        descLocalFirstNotice: "Your data is saved strictly in this browser. Export a JSON backup regularly to avoid data loss when clearing cache.",
         btnExportCSV: "Export (CSV)",
         btnExportJSON: "Backup (JSON)",
         btnImportJSON: "Import",
@@ -867,6 +943,12 @@
         urgency0: "Sans frais (0%)",
         urgency25: "Urgent (+25%)",
         urgency50: "Critique / Week-end (+50%)",
+        labelTaxToggle: "Détailler les Taxes (TVA / Retenue)",
+        labelIvaRate: "TVA (%)",
+        labelIrpfRate: "Retenue d'impôt (%)",
+        outBaseImponible: "Base Hors Taxes :",
+        outIva: "TVA",
+        outIrpf: "Retenue d'impôt",
         titleProPanel: "Fonctions Marque Blanche & Paiement (PRO)",
         btnActivatePro: "Activer PRO",
         labelLogo: "Logo d'Entreprise",
@@ -909,8 +991,8 @@
         descLocalFirst: "ScopeGuard fonctionne à 100% sur le client. Aucune donnée n'est stockée sur des serveurs externes.",
         titleLegal1: "1. Exonération de Responsabilité",
         descLegal1: "Les calculs et estimations de délais sont donnés à titre indicatif selon les données saisies par l'utilisateur.",
-        titleLegal2: "2. Relation Contractuelle Neutre",
-        descLegal2: "ScopeGuard agit uniquement en tant que générateur de documents.",
+        titleLegal2: "2. Validité des Accords Numériques",
+        descLegal2: "La signature sur écran et l'acceptation électronique constituent des engagements juridiquement binding.",
         titleLegal3: "3. Connexion Sécurisée (HTTPS)",
         descLegal3: "Toutes les connexions s'effectuent sous protocole HTTPS sécurisé.",
         titleLegal4: "4. Contact et Support",
@@ -921,6 +1003,8 @@
         btnClear: "Effacer",
         btnSaveSignature: "Enregistrer Signature",
         modalHistoryTitle: "Documents Enregistrés",
+        titleLocalFirstNotice: "Stockage 100% Privé & Local",
+        descLocalFirstNotice: "Vos données restent stockées dans ce navigateur. Effectuez un backup JSON régulièrement.",
         btnExportCSV: "Exporter (CSV)",
         btnExportJSON: "Backup (JSON)",
         btnImportJSON: "Importer",
@@ -1007,6 +1091,12 @@
         urgency0: "Kein Zuschlag (0%)",
         urgency25: "Dringend (+25%)",
         urgency50: "Kritisch / Wochenende (+50%)",
+        labelTaxToggle: "Steuern aufschlüsseln (MwSt. / Einbehalt)",
+        labelIvaRate: "MwSt. (%)",
+        labelIrpfRate: "Steuereinbehalt (%)",
+        outBaseImponible: "Nettobetrag:",
+        outIva: "MwSt.",
+        outIrpf: "Steuereinbehalt",
         titleProPanel: "White-Label & Zahlungsfunktionen (PRO)",
         btnActivatePro: "PRO aktivieren",
         labelLogo: "Firmenlogo",
@@ -1049,8 +1139,8 @@
         descLocalFirst: "ScopeGuard läuft zu 100 % im Client. Keine Daten werden an externe Server gesendet.",
         titleLegal1: "1. Haftungsausschluss für Berechnungen",
         descLegal1: "Kostenberechnungen und Zeitschätzungen sind Richtwerte auf Basis der Benutzereingaben.",
-        titleLegal2: "2. Neutrale Vertragsbeziehung",
-        descLegal2: "ScopeGuard fungiert rein als Dokumentengenerator.",
+        titleLegal2: "2. Gültigkeit digitaler Vereinbarungen",
+        descLegal2: "On-Screen-Unterschriften und elektronische Bestätigungen stellen rechtsverbindliche Willenserklärungen dar.",
         titleLegal3: "3. Sichere Verbindung (HTTPS)",
         descLegal3: "Alle Verbindungen laufen über das sichere HTTPS-Protokoll.",
         titleLegal4: "4. Kontakt & Support",
@@ -1061,6 +1151,8 @@
         btnClear: "Löschen",
         btnSaveSignature: "Unterschrift speichern",
         modalHistoryTitle: "Gespeicherte Dokumente",
+        titleLocalFirstNotice: "100% Privater & Lokaler Speicher",
+        descLocalFirstNotice: "Ihre Daten bleiben in diesem Browser. Erstellen Sie regelmäßig ein JSON-Backup.",
         btnExportCSV: "Exportieren (CSV)",
         btnExportJSON: "Backup (JSON)",
         btnImportJSON: "Importieren",
@@ -1129,11 +1221,13 @@
       es: {
         standard: [
           "El inicio de estas tareas adicionales requerirá la aprobación explícita de este presupuesto.",
-          "El plazo de entrega global del proyecto original se extenderá según el impacto estimado indicado arriba."
+          "El plazo de entrega global del proyecto original se extenderá según el impacto estimado indicado arriba.",
+          "La aceptación digital o firma táctil reflejada en este documento constituye una orden de trabajo vinculante."
         ],
         advance_50: [
           "Se requiere el abono del 50% del importe de esta adenda antes de dar comienzo a los trabajos.",
-          "El 50% restante se abonará junto con la entrega final y conformidad de la modificación."
+          "El 50% restante se abonará junto con la entrega final y conformidad de la modificación.",
+          "La aceptación digital expresada constituye un compromiso formal de pago bajo los términos indicados."
         ],
         strict_delay: [
           "Este presupuesto de modificación tiene una validez de 5 días hábiles desde su emisión.",
@@ -1147,11 +1241,13 @@
       en: {
         standard: [
           "Work on these additional tasks will begin only upon explicit approval of this proposal.",
-          "The overall delivery timeline of the original project will be extended according to the estimated impact above."
+          "The overall delivery timeline of the original project will be extended according to the estimated impact above.",
+          "Digital approval or touchscreen signature constitutes a legally binding work order."
         ],
         advance_50: [
           "A 50% deposit of this addendum total is required before work commences.",
-          "The remaining 50% will be paid upon final delivery and client acceptance of the change."
+          "The remaining 50% will be paid upon final delivery and client acceptance of the change.",
+          "Electronic acceptance bindingly confirms agreement to the upfront deposit terms."
         ],
         strict_delay: [
           "This change quote is valid for 5 business days from issuance.",
@@ -1165,7 +1261,8 @@
       fr: {
         standard: [
           "Le début de ces travaux additionnels nécessitera la validation explicite de ce devis.",
-          "Le délai de livraison global du projet initial sera prolongé en fonction de l'impact estimé ci-dessus."
+          "Le délai de livraison global du projet initial sera prolongé en fonction de l'impact estimé ci-dessus.",
+          "La validation numérique ou signature tactile constitue un ordre de trabajo binding."
         ],
         advance_50: [
           "Un acompte de 50 % du montant de cet avenant est exigé avant le début des travaux.",
@@ -1183,7 +1280,8 @@
       de: {
         standard: [
           "Der Beginn dieser zusätzlichen Aufgaben erfordert die ausdrückliche Genehmigung dieses Angebots.",
-          "Der Gesamtliefertermin des ursprünglichen Projekts verlängert sich entsprechend den oben angegebenen Schätzungen."
+          "Der Gesamtliefertermin des ursprünglichen Projekts verlängert sich entsprechend den oben angegebenen Schätzungen.",
+          "Die digitale Bestätigung oder Unterschrift gilt als verbindlicher Arbeitsauftrag."
         ],
         advance_50: [
           "Vor Beginn der Arbeiten ist eine Anzahlung von 50 % des Gesamtbetrags dieser Vereinbarung erforderlich.",
@@ -1210,6 +1308,9 @@
       currency: "EUR",
       hourlyRate: 45,
       urgency: 0,
+      taxEnabled: false,
+      taxRate: 21,
+      irpfRate: 0,
       customLogo: null,
       paymentUrl: '',
       hideWatermark: false,
@@ -1249,36 +1350,33 @@
         { id: 102, date: new Date().toISOString().split('T')[0], desc: dict.defaultWork2, hours: 1.5 }
       ];
 
-// ACTIVACIÓN PRO SEGURA MEDIANTE CLOUDFLARE WORKER
-    const urlParams = new URLSearchParams(window.location.search);
-    const sessionId = urlParams.get('session_id');
+      // ACTIVACIÓN PRO SEGURA MEDIANTE CLOUDFLARE WORKER
+      const urlParams = new URLSearchParams(window.location.search);
+      const sessionId = urlParams.get('session_id');
 
-    // Si ya estaba activado en localStorage en este navegador
-    if (localStorage.getItem('scopeguard_pro_active') === 'true') {
-      state.isPro = true;
-    }
+      if (localStorage.getItem('scopeguard_pro_active') === 'true') {
+        state.isPro = true;
+      }
 
-    // Si llega un comprador redirigido desde Stripe con session_id
-    if (sessionId) {
-      fetch(`https://scopeguard-verify.gregorymunsmi.workers.dev?session_id=${encodeURIComponent(sessionId)}`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.valid) {
-            state.isPro = true;
-            localStorage.setItem('scopeguard_pro_active', 'true');
-            applyProUIState();
-            updateProposal();
-            alert(translations[currentLang]?.alertLicenseActivated || "¡Licencia PRO activada con éxito!");
-          } else {
-            alert(translations[currentLang]?.alertLicenseInvalid || "ID de sesión no válido o pago no completado.");
-          }
-          // Limpia la barra de direcciones para quitar el session_id
-          window.history.replaceState({}, document.title, window.location.pathname);
-        })
-        .catch(err => {
-          console.error("Error al verificar la sesión con Cloudflare Worker:", err);
-        });
-    }
+      if (sessionId) {
+        fetch(`https://scopeguard-verify.gregorymunsmi.workers.dev?session_id=${encodeURIComponent(sessionId)}`)
+          .then(res => res.json())
+          .then(data => {
+            if (data.valid) {
+              state.isPro = true;
+              localStorage.setItem('scopeguard_pro_active', 'true');
+              applyProUIState();
+              updateProposal();
+              alert(translations[currentLang]?.alertLicenseActivated || "¡Licencia PRO activada con éxito!");
+            } else {
+              alert(translations[currentLang]?.alertLicenseInvalid || "ID de sesión no válido o pago no completado.");
+            }
+            window.history.replaceState({}, document.title, window.location.pathname);
+          })
+          .catch(err => {
+            console.error("Error al verificar la sesión con Cloudflare Worker:", err);
+          });
+      }
 
       if (window.location.hash.startsWith('#proposal=')) {
         try {
@@ -1400,11 +1498,27 @@
       document.getElementById('currency').value = state.currency || 'EUR';
       document.getElementById('hourlyRate').value = state.hourlyRate || 0;
       document.getElementById('urgency').value = state.urgency || 0;
+      document.getElementById('taxToggle').checked = state.taxEnabled || false;
+      document.getElementById('taxRate').value = state.taxRate !== undefined ? state.taxRate : 21;
+      document.getElementById('irpfRate').value = state.irpfRate !== undefined ? state.irpfRate : 0;
       document.getElementById('themeColorSelect').value = state.themeColor || 'indigo';
       document.getElementById('legalTemplateSelect').value = state.legalTemplate || 'standard';
       document.getElementById('webhookUrlInput').value = state.webhookUrl || '';
       document.getElementById('paymentUrlInput').value = state.paymentUrl || '';
       document.getElementById('hideWatermark').checked = state.hideWatermark || false;
+
+      toggleTaxSettings(state.taxEnabled);
+    }
+
+    function toggleTaxSettings(enabled) {
+      state.taxEnabled = enabled;
+      const container = document.getElementById('tax-inputs-container');
+      if (enabled) {
+        container.classList.remove('hidden');
+      } else {
+        container.classList.add('hidden');
+      }
+      updateProposal();
     }
 
     function handleLogoUpload(e) {
@@ -1542,6 +1656,9 @@
       state.hourlyRate = isNaN(rawRate) || rawRate < 0 ? 0 : rawRate;
       state.urgency = parseFloat(document.getElementById('urgency').value) || 0;
 
+      state.taxRate = parseFloat(document.getElementById('taxRate').value) || 0;
+      state.irpfRate = parseFloat(document.getElementById('irpfRate').value) || 0;
+
       const symbol = currencySymbols[state.currency] || '$';
       const activeColorClass = (state.isPro && themeClasses[state.themeColor]) ? themeClasses[state.themeColor].text : 'text-indigo-600';
 
@@ -1656,7 +1773,35 @@
       }
 
       const urgencyExtra = state.mode === 'proposal' ? subtotal * (state.urgency / 100) : 0;
-      const grandTotal = subtotal + urgencyExtra;
+      const baseImponible = subtotal + urgencyExtra;
+
+      // CÁLCULO DE TAXES
+      let taxAmount = 0;
+      let irpfAmount = 0;
+      const taxRows = document.getElementById('out-tax-rows');
+
+      if (state.taxEnabled) {
+        taxRows.classList.remove('hidden');
+        taxAmount = baseImponible * (state.taxRate / 100);
+        irpfAmount = baseImponible * (state.irpfRate / 100);
+
+        document.getElementById('out-base').innerText = `${baseImponible.toFixed(2)} ${symbol}`;
+        document.getElementById('out-tax-rate').innerText = state.taxRate;
+        document.getElementById('out-tax-val').innerText = `+${taxAmount.toFixed(2)} ${symbol}`;
+
+        const irpfRow = document.getElementById('out-irpf-row');
+        if (state.irpfRate > 0) {
+          irpfRow.classList.remove('hidden');
+          document.getElementById('out-irpf-rate').innerText = state.irpfRate;
+          document.getElementById('out-irpf-val').innerText = `-${irpfAmount.toFixed(2)} ${symbol}`;
+        } else {
+          irpfRow.classList.add('hidden');
+        }
+      } else {
+        taxRows.classList.add('hidden');
+      }
+
+      const grandTotal = baseImponible + taxAmount - irpfAmount;
       const daysDelay = Math.ceil(totalHours / 4);
 
       document.getElementById('out-subtotal').innerText = state.mode === 'proposal' ? `${subtotal.toFixed(2)} ${symbol}` : `${totalHours} hrs (${subtotal.toFixed(2)} ${symbol})`;
@@ -1721,7 +1866,10 @@
       if (state.mode === 'proposal') {
         let totalHours = state.proposalItems.reduce((acc, i) => acc + i.hours, 0);
         let subtotal = totalHours * state.hourlyRate;
-        let total = subtotal * (1 + state.urgency / 100);
+        let base = subtotal * (1 + state.urgency / 100);
+        let tax = state.taxEnabled ? base * (state.taxRate / 100) : 0;
+        let irpf = state.taxEnabled ? base * (state.irpfRate / 100) : 0;
+        let total = base + tax - irpf;
         let days = Math.ceil(totalHours / 4);
         let dayText = days === 1 ? dict.dayLabel : dict.daysLabel;
 
@@ -1756,7 +1904,10 @@
         }
       } else {
         let totalHours = state.timesheetItems.reduce((acc, i) => acc + i.hours, 0);
-        let total = totalHours * state.hourlyRate;
+        let base = totalHours * state.hourlyRate;
+        let tax = state.taxEnabled ? base * (state.taxRate / 100) : 0;
+        let irpf = state.taxEnabled ? base * (state.irpfRate / 100) : 0;
+        let total = base + tax - irpf;
 
         if (currentLang === 'en') {
           text += `Hi! 👋 Here is the final log of worked hours for *${state.projectName}*.\n\n`;
@@ -1809,7 +1960,6 @@
 
     let sigCanvas, sigCtx, isDrawing = false;
 
-    // FIRMA TÁCTIL CORREGIDA
     function initSignatureCanvas() {
       sigCanvas = document.getElementById('signature-canvas');
       sigCtx = sigCanvas.getContext('2d');
@@ -1869,7 +2019,6 @@
       closeSignatureModal();
     }
 
-    // EXPORTACIÓN CSV CORREGIDA CON BLOB UTF-8
     function exportHistoryToCSV() {
       const dict = translations[currentLang] || translations.es;
       if (!state.isPro) {
@@ -1889,7 +2038,11 @@
         const isProp = row.mode === 'proposal';
         const itemsArr = isProp ? (row.data.proposalItems || []) : (row.data.timesheetItems || []);
         const totalHours = itemsArr.reduce((a, b) => a + (parseFloat(b.hours) || 0), 0);
-        const total = totalHours * (parseFloat(row.data.hourlyRate) || 0) * (isProp ? (1 + (parseFloat(row.data.urgency) || 0) / 100) : 1);
+        
+        let base = totalHours * (parseFloat(row.data.hourlyRate) || 0) * (isProp ? (1 + (parseFloat(row.data.urgency) || 0) / 100) : 1);
+        let tax = row.data.taxEnabled ? base * ((parseFloat(row.data.taxRate) || 0) / 100) : 0;
+        let irpf = row.data.taxEnabled ? base * ((parseFloat(row.data.irpfRate) || 0) / 100) : 0;
+        let total = base + tax - irpf;
 
         const client = `"${(row.data.clientName || '').replace(/"/g, '""')}"`;
         const project = `"${(row.data.projectName || '').replace(/"/g, '""')}"`;
@@ -1908,7 +2061,6 @@
       URL.revokeObjectURL(url);
     }
 
-    // EXPORTACIÓN JSON CORREGIDA CON BLOB UTF-8
     function exportFullBackupJSON() {
       if (!state.isPro) {
         openProModal();
@@ -1916,7 +2068,7 @@
       }
       const history = JSON.parse(localStorage.getItem('scopeguard_history') || '[]');
       const backupData = {
-        version: "1.0",
+        version: "1.1",
         exportDate: new Date().toISOString(),
         history: history,
         currentState: state
@@ -2024,7 +2176,11 @@
         const isProp = item.mode === 'proposal';
         const itemsArr = isProp ? (item.data.proposalItems || []) : (item.data.timesheetItems || []);
         const totalHours = itemsArr.reduce((a, b) => a + (parseFloat(b.hours) || 0), 0);
-        const total = totalHours * (parseFloat(item.data.hourlyRate) || 0) * (isProp ? (1 + (parseFloat(item.data.urgency) || 0) / 100) : 1);
+        
+        let base = totalHours * (parseFloat(item.data.hourlyRate) || 0) * (isProp ? (1 + (parseFloat(item.data.urgency) || 0) / 100) : 1);
+        let tax = item.data.taxEnabled ? base * ((parseFloat(item.data.taxRate) || 0) / 100) : 0;
+        let irpf = item.data.taxEnabled ? base * ((parseFloat(item.data.irpfRate) || 0) / 100) : 0;
+        let total = base + tax - irpf;
 
         const div = document.createElement('div');
         div.className = "flex justify-between items-center bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs hover:border-indigo-300 transition";
