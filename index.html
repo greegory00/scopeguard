@@ -2220,9 +2220,24 @@
       updateHistoryCount();
     }
 
-    function openProModal() { document.getElementById('pro-modal').classList.remove('hidden'); }
+function openProModal() { document.getElementById('pro-modal').classList.remove('hidden'); }
     function closeProModal() { document.getElementById('pro-modal').classList.add('hidden'); }
     function resetApp() { window.location.hash = ''; window.location.reload(); }
+
+    function downloadPDF() {
+      const element = document.querySelector('.print-card');
+      const clientName = (state.clientName || 'cliente').replace(/[^a-z0-9]/gi, '_').toLowerCase();
+      
+      const opt = {
+        margin:       [10, 10, 10, 10],
+        filename:     `presupuesto_${clientName}.pdf`,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true, logging: false },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      html2pdf().set(opt).from(element).save();
+    }
   </script>
 </body>
 </html>
