@@ -1970,7 +1970,13 @@
         const rect = sigCanvas.getBoundingClientRect();
         const clientX = e.touches ? e.touches[0].clientX : e.clientX;
         const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-        return { x: clientX - rect.left, y: clientY - rect.top };
+        // Ajuste de escala entre el tamaño del canvas y su representación CSS
+        const scaleX = sigCanvas.width / rect.width;
+        const scaleY = sigCanvas.height / rect.height;
+        return { 
+          x: (clientX - rect.left) * scaleX, 
+          y: (clientY - rect.top) * scaleY 
+        };
       }
 
       function startDraw(e) {
@@ -2202,15 +2208,16 @@
     }
 
     function loadProposal(id) {
-      let history = JSON.parse(localStorage.getItem('scopeguard_history') || '[]');
-      const found = history.find(h => h.id === id);
-      if (found) {
-        state = { ...found.data };
-        syncFormFromState();
-        setMode(state.mode || 'proposal');
-        toggleHistoryModal();
-      }
-    }
+  let history = JSON.parse(localStorage.getItem('scopeguard_history') || '[]');
+  const found = history.find(h => h.id === id);
+  if (found) {
+    const currentPro = state.isPro; // Guarda el estado real
+    state = { ...found.data, isPro: currentPro }; // Mantiene el estado real
+    syncFormFromState();
+    setMode(state.mode || 'proposal');
+    toggleHistoryModal();
+  }
+}
 
     function deleteHistoryItem(id) {
       let history = JSON.parse(localStorage.getItem('scopeguard_history') || '[]');
